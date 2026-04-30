@@ -28,29 +28,43 @@ public class Journal {
     /**
      * 
      */
-    public void subscribe(subscriber : Subscriber) : void() {
-        // TODO implement here
+    public void subscribe(Subscriber subscriber) {
+        if (this.subscribers == null) {
+            this.subscribers = new ArrayList<>();
+        }
+        if (subscriber != null) {
+            this.subscribers.add(subscriber);
+        }
     }
 
     /**
      * 
      */
-    public void unsubscribe(subscriber : Subscriber) : void() {
-        // TODO implement here
+    public void unsubscribe(Subscriber subscriber) {
+        if (this.subscribers != null && subscriber != null) {
+            this.subscribers.remove(subscriber);
+        }
     }
 
     /**
      * 
      */
-    public void notifySubscribers() : void() {
-        // TODO implement here
+    public void notifySubscribers() {
+        if (this.subscribers == null) {
+            return;
+        }
+        for (Subscriber subscriber : this.subscribers) {
+            if (subscriber != null) {
+                subscriber.update("New article available in " + this.name);
+            }
+        }
     }
 
     /**
      * 
      */
-    public void publishNews(news : News) : void() {
-        // TODO implement here
+    public void publishNews(News news) {
+        notifySubscribers();
     }
 
 }

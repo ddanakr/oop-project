@@ -11,16 +11,16 @@ public interface RequestManager {
     /**
      * 
      */
-    public void approveRequest(request: Request): void();
+    void approveRequest(Request request);
 
     /**
      * 
      */
-    public void viewRequests() : List<Request>();
+    List<Request> viewRequests();
 
     /**
      * 
      */
-    public void rejectRequest(request: Request): void();
+    void rejectRequest(Request request);
 
 }

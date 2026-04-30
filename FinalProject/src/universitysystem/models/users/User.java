@@ -6,7 +6,7 @@ import java.util.*;
 /**
  * 
  */
-public abstract class User {
+public abstract class User  implements Subcriber {
 
     /**
      * Default constructor
@@ -75,39 +75,39 @@ public abstract class User {
 
     /**
      * @param email 
-     * @return
      */
     public void setEmail(String email) {
-        // TODO implement here
-        return null;
+        this.email = email;
     }
 
     /**
      * 
      */
-    public void changePassword(newPassword : String) : void() {
-        // TODO implement here
+    public void changePassword(String newPassword) {
+        if (newPassword != null && !newPassword.isEmpty()) {
+            this.password = newPassword;
+        }
     }
 
     /**
      * 
      */
-    public void sendMessage(message : Message) : void() {
-        // TODO implement here
+    public void sendMessage(Message message) {
+        // Messaging implementation can be added later.
     }
 
     /**
      * 
      */
-    public void getMessage() : List<Message>() {
-        // TODO implement here
+    public List<Message> getMessage() {
+        return Collections.emptyList();
     }
 
     /**
      * 
      */
-    public void switchLanguage(language : Language) : void() {
-        // TODO implement here
+    public void switchLanguage(Language language) {
+        // Language switching not modeled yet.
     }
 
 }

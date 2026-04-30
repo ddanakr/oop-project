@@ -11,26 +11,26 @@ public interface CourseManager {
     /**
      * 
      */
-    public void assignCourseToTeacher(course : Course, teacher : Teacher) : void();
+    void assignCourseToTeacher(Course course, Teacher teacher);
 
     /**
      * 
      */
-    public void getStudentsInfo() : List<Student>();
+    List<Student> getStudentsInfo();
 
     /**
      * 
      */
-    public void getTeacherInfo() : List<Teacher>();
+    List<Teacher> getTeacherInfo();
 
     /**
      * 
      */
-    public void openCourseRegistration(course: Course): void();
+    void openCourseRegistration(Course course);
 
     /**
      * 
      */
-    public void closeCourseRegistration(course: Course): void();
+    void closeCourseRegistration(Course course);
 
 }

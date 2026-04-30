@@ -11,16 +11,16 @@ public interface ReportManager {
     /**
      * 
      */
-    public void createPerformanceReport() : void();
+    void createPerformanceReport();
 
     /**
      * 
      */
-    public void manageNews(news : News) : void();
+    void manageNews(News news);
 
     /**
      * 
      */
-    public void generateTopResearcherNews() : List<News>();
+    List<News> generateTopResearcherNews();
 
 }

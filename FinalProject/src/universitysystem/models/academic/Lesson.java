@@ -1,5 +1,6 @@
 package universitysystem.models.academic;
 
+import universitysystem.models.DateTime;
 import java.io.*;
 import java.util.*;
 
@@ -17,7 +18,7 @@ public class Lesson {
     /**
      * 
      */
-    private void course;
+    private Course course;
 
     /**
      * 

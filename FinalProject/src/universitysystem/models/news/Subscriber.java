@@ -8,10 +8,9 @@ import java.util.*;
  */
 public interface Subscriber {
 
-
     /**
      * 
      */
-    public void update(notification : String) : void();
+    void update(String notification);
 
 }

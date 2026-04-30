@@ -14,21 +14,21 @@ public interface Researcher {
     /**
      * 
      */
-    public void publishPaper(paper : ResearchPaper) : void();
+    void publishPaper(ResearchPaper paper);
 
     /**
      * 
      */
-    public void getHIndex() : int();
+    int getHIndex();
 
     /**
      * 
      */
-    public void printPapers(comp : Comparator<ResearchPaper>) : void();
+    void printPapers(Comparator<ResearchPaper> comp);
 
     /**
      * 
      */
-    public void joinProject(project : ResearchProject) : void();
+    void joinProject(ResearchProject project);
 
 }
