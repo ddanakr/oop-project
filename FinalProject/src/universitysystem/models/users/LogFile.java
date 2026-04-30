@@ -7,7 +7,7 @@ import java.util.*;
 /**
  * 
  */
-public class LogFile {
+public class LogFile implements Serializable {
 
     /**
      * Default constructor

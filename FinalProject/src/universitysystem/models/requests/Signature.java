@@ -31,8 +31,60 @@ public class Signature {
      * 
      */
     private DateTime signedAt ;
+    
+    
 
+    public Signature(User signer, SignerRole signerRole, LocalDateTime signedAt) {
+        this.signer = signer;
+        this.signerRole = signerRole;
+        this.signedAt = signedAt;
+    }
 
+    public User getSigner() {
+        return signer;
+    }
+
+    public void setSigner(User signer) {
+        this.signer = signer;
+    }
+
+    public SignerRole getSignerRole() {
+        return signerRole;
+    }
+
+    public void setSignerRole(SignerRole signerRole) {
+        this.signerRole = signerRole;
+    }
+
+    public LocalDateTime getSignedAt() {
+        return signedAt;
+    }
+
+    public void setSignedAt(LocalDateTime signedAt) {
+        this.signedAt = signedAt;
+    }
+
+    @Override
+    public String toString() {
+        return "Signature{signer=" + (signer == null ? null : signer.getLogin()) + ", signerRole=" + signerRole
+                + ", signedAt=" + signedAt + "}";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Signature signature = (Signature) o;
+        return Objects.equals(signer == null ? null : signer.getLogin(),
+                signature.signer == null ? null : signature.signer.getLogin())
+                && signerRole == signature.signerRole
+                && Objects.equals(signedAt, signature.signedAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(signer == null ? null : signer.getLogin(), signerRole, signedAt);
+    }
 
     /**
      * 

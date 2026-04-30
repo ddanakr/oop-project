@@ -8,7 +8,7 @@ import java.util.*;
 /**
  * 
  */
-public class Enrollment {
+public class Enrollment implements Serializable {
 
     /**
      * Default constructor

@@ -6,7 +6,7 @@ import java.util.*;
 /**
  * 
  */
-public class ResearchPaper {
+public class ResearchPaper implements Serializable {
 
     /**
      * Default constructor

@@ -6,7 +6,7 @@ import java.util.*;
 /**
  * 
  */
-public class Course {
+public class Course implements Serializable{
 
     /**
      * Default constructor

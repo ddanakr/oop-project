@@ -8,10 +8,11 @@ import java.util.*;
  */
 public class Admin extends Employee {
 
-    /**
+	/**
      * Default constructor
      */
     public Admin() {
+        this.users = new ArrayList<>();
     }
 
     /**
@@ -19,43 +20,70 @@ public class Admin extends Employee {
      */
     private List<User> users;
 
+    public Admin(
+            String name,
+            String lastName,
+            int id,
+            String login,
+            String password,
+            int age,
+            String email,
+            String phoneNumber,
+            String gender,
+            double salary,
+            java.util.Date hireDate,
+            List<User> users
+    ) {
+        super(name, lastName, id, login, password, age, email, phoneNumber, gender, salary, hireDate);
+        this.users = users == null ? new ArrayList<>() : new ArrayList<>(users);
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users == null ? new ArrayList<>() : new ArrayList<>(users);
+    }
+    
+    
+    
     /**
      * 
      */
     public void addUser(User user) {
-        if (this.users == null) {
-            this.users = new ArrayList<>();
-        }
-        if (user != null) {
-            this.users.add(user);
-        }
+        if (user == null) return;
+        if (users == null) users = new ArrayList<>();
+        users.add(user);
+        Database.getInstance().getUsers().add(user);
     }
 
     /**
      * 
      */
     public void deleteUser(int userId) {
-        if (this.users != null) {
-            this.users.removeIf(user -> user != null && user.getId() == userId);
+        if (users != null) {
+            users.removeIf(u -> u != null && u.getId() == userId);
         }
+        Database.getInstance().getUsers().removeIf(u -> u != null && u.getId() == userId);
     }
 
     /**
      * 
      */
     public void updateUser(User user) {
-        if (user == null || this.users == null) {
-            return;
-        }
-        for (int i = 0; i < this.users.size(); i++) {
-            User existing = this.users.get(i);
+        if (user == null) return;
+        List<User> dbUsers = Database.getInstance().getUsers();
+        for (int i = 0; i < dbUsers.size(); i++) {
+            User existing = dbUsers.get(i);
             if (existing != null && existing.getId() == user.getId()) {
-                this.users.set(i, user);
+                dbUsers.set(i, user);
                 return;
             }
         }
-        this.users.add(user);
+        dbUsers.add(user);
     }
+    
 
     /**
      * 
@@ -78,6 +106,25 @@ public class Admin extends Employee {
     public List<LogFile> viewLogs() {
         Database db = Database.getInstance();
         return db != null && db.getLogFiles() != null ? db.getLogFiles() : Collections.emptyList();
+    }
+    
+    
+    @Override
+    public String toString() {
+        return "Admin{login='" + getLogin() + "', id=" + getId() + ", users=" + (users == null ? 0 : users.size()) + "}";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Admin admin = (Admin) o;
+        return Objects.equals(getLogin(), admin.getLogin());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getLogin());
     }
 
 }

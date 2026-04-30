@@ -9,7 +9,7 @@ import java.util.*;
 /**
  * 
  */
-public class Request {
+public class Request implements Serializable {
 
     /**
      * Default constructor

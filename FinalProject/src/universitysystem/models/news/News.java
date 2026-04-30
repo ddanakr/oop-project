@@ -9,7 +9,7 @@ import java.util.*;
 /**
  * 
  */
-public class News {
+public class News implements Serializable {
 
     /**
      * Default constructor
