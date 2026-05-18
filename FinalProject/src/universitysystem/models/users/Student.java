@@ -1,4 +1,4 @@
-package universitysystem.models.users;
+   package universitysystem.models.users;
 
 import java.io.*;
 import java.util.*;
@@ -180,7 +180,7 @@ public class Student extends User {
         }
         db.getRequests().add(request);
         return request;
-    }
+    } 
 
     /**
      * 
