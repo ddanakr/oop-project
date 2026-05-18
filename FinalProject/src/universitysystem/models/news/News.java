@@ -1,6 +1,6 @@
 package universitysystem.models.news;
 
-import universitysystem.models.DateTime;
+import universitysystem.models.core.DateTime;
 import universitysystem.models.users.User;
 
 import java.io.*;

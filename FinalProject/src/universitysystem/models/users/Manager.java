@@ -1,11 +1,13 @@
 package universitysystem.models.users;
 
+import universitysystem.database.Database;
+import universitysystem.enums.RequestStatus;
 import universitysystem.models.academic.Course;
 import universitysystem.models.news.News;
 import universitysystem.models.requests.Request;
-import universitysystem.models.requests.RequestStatus;
 import universitysystem.models.research.ResearchPaper;
 import universitysystem.models.research.ResearchProject;
+import universitysystem.models.research.Researcher;
 
 import java.io.*;
 import java.util.*;

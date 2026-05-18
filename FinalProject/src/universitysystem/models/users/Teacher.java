@@ -1,5 +1,6 @@
 package universitysystem.models.users;
 
+import universitysystem.database.Database;
 import universitysystem.models.academic.Course;
 import universitysystem.models.academic.Enrollment;
 import universitysystem.models.academic.Mark;

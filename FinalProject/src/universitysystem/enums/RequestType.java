@@ -1,4 +1,4 @@
-package universitysystem.models.requests;
+package universitysystem.enums;
 
 /**
  * 

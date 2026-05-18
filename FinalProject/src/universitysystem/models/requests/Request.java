@@ -1,6 +1,9 @@
 package universitysystem.models.requests;
 
-import universitysystem.models.DateTime;
+import universitysystem.enums.RequestStatus;
+import universitysystem.enums.RequestType;
+import universitysystem.enums.Urgency;
+import universitysystem.models.core.DateTime;
 import universitysystem.models.users.User;
 
 import java.io.*;

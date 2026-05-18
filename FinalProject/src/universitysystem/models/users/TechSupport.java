@@ -2,8 +2,8 @@ package universitysystem.models.users;
 
 import java.io.*;
 import java.util.*;
+import universitysystem.enums.RequestStatus;
 import universitysystem.models.requests.Request;
-import universitysystem.models.requests.RequestStatus;
 
 /**
  * 

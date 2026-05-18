@@ -1,5 +1,6 @@
 package universitysystem.models.users;
 
+import universitysystem.enums.Degree;
 import universitysystem.models.research.ResearchPaper;
 import universitysystem.models.research.ResearchProject;
 import universitysystem.models.research.Researcher;

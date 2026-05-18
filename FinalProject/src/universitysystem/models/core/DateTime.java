@@ -1,4 +1,4 @@
-package universitysystem.models;
+package universitysystem.models.core;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

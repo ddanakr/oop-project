@@ -1,5 +1,7 @@
 package universitysystem.models.research;
 
+import universitysystem.enums.CitationFormat;
+
 import java.io.*;
 import java.util.*;
 

@@ -1,6 +1,6 @@
-package universitysystem.models.users;
+package universitysystem.models.core;
 
-import universitysystem.models.DateTime;
+import universitysystem.models.users.User;
 import java.io.*;
 import java.util.*;
 

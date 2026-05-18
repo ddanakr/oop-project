@@ -1,12 +1,16 @@
 package universitysystem.models.users;
 
+import universitysystem.enums.Language;
+import universitysystem.models.core.Message;
+import universitysystem.models.news.Subscriber;
+
 import java.io.*;
 import java.util.*;
 
 /**
  * 
  */
-public abstract class User  implements Subcriber, Serializable {
+public abstract class User implements Subscriber, Serializable {
 
     /**
      * Default constructor
@@ -195,6 +199,11 @@ public abstract class User  implements Subcriber, Serializable {
      * 
      */
     public void switchLanguage(Language language) {
+        // later
+    }
+
+    @Override
+    public void update(String notification) {
         // later
     }
     

@@ -1,5 +1,7 @@
 package universitysystem.models.research;
 
+import universitysystem.models.users.User;
+
 import java.io.*;
 import java.util.*;
 

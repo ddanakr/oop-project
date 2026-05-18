@@ -1,6 +1,6 @@
 package universitysystem.models.news;
 
-import universitysystem.models.DateTime;
+import universitysystem.models.core.DateTime;
 import universitysystem.models.users.User;
 
 import java.io.*;
@@ -55,7 +55,7 @@ public class Comment {
         this.text = text;
     }
 
-    public LocalDateTime getSentAt() {
+    public DateTime getSentAt() {
         return sentAt;
     }
 

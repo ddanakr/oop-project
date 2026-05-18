@@ -1,4 +1,4 @@
-package universitysystem.models.users;
+package universitysystem.database;
 
 import universitysystem.models.academic.Course;
 import universitysystem.models.academic.Enrollment;
@@ -6,6 +6,8 @@ import universitysystem.models.news.News;
 import universitysystem.models.requests.Request;
 import universitysystem.models.research.ResearchPaper;
 import universitysystem.models.research.ResearchProject;
+import universitysystem.models.core.LogFile;
+import universitysystem.models.users.User;
 
 import java.io.*;
 import java.util.*;

@@ -1,4 +1,4 @@
-package universitysystem.models.research;
+package universitysystem.enums;
 
 /**
  * 

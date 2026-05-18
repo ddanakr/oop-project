@@ -1,4 +1,4 @@
-package universitysystem.models.users;
+package universitysystem.enums;
 
 /**
  * 

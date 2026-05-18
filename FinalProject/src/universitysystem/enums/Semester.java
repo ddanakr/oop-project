@@ -1,4 +1,4 @@
-package universitysystem.models.academic;
+package universitysystem.enums;
 
 /**
  * 

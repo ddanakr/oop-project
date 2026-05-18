@@ -18,6 +18,12 @@ public abstract class ResearchDecorator implements Researcher {
         this.projects = new ArrayList<>();
     }
 
+    public ResearchDecorator(User user, List<ResearchPaper> papers, List<ResearchProject> projects) {
+        this.user = user;
+        this.papers = papers != null ? papers : new ArrayList<>();
+        this.projects = projects != null ? projects : new ArrayList<>();
+    }
+
     /**
      * 
      */

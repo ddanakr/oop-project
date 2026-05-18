@@ -1,5 +1,7 @@
 package universitysystem.models.users;
 
+import universitysystem.models.news.News;
+
 import java.io.*;
 import java.util.*;
 

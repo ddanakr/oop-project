@@ -1,14 +1,15 @@
-   package universitysystem.models.users;
+package universitysystem.models.users;
 
 import java.io.*;
 import java.util.*;
+import universitysystem.database.Database;
+import universitysystem.enums.Degree;
+import universitysystem.enums.RequestType;
+import universitysystem.enums.Urgency;
 import universitysystem.models.academic.Course;
 import universitysystem.models.academic.Enrollment;
 import universitysystem.models.academic.Mark;
 import universitysystem.models.requests.Request;
-import universitysystem.models.requests.RequestType;
-import universitysystem.models.requests.Urgency;
-import universitysystem.models.users.Teacher;
 
 /**
  * 
@@ -174,7 +175,7 @@ public class Student extends User {
             return null;
         }
         int requestId = db.getRequests() != null ? db.getRequests().size() + 1 : 1;
-        Request request = new Request(requestId, this, requestType, "Request from student", null, Urgency.MEDIUM, new ArrayList<>(), new universitysystem.models.DateTime());
+        Request request = new Request(requestId, this, requestType, "Request from student", null, Urgency.MEDIUM, new ArrayList<>(), new universitysystem.models.core.DateTime());
         if (db.getRequests() == null) {
             db.setRequests(new ArrayList<>());
         }

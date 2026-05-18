@@ -1,5 +1,6 @@
 package universitysystem.models.academic;
 
+import universitysystem.enums.Semester;
 import universitysystem.models.users.Student;
 
 import java.io.*;

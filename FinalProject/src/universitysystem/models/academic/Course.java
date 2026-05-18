@@ -1,5 +1,8 @@
 package universitysystem.models.academic;
 
+import universitysystem.enums.CourseType;
+import universitysystem.models.users.Teacher;
+
 import java.io.*;
 import java.util.*;
 

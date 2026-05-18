@@ -1,6 +1,7 @@
 package universitysystem.models.academic;
 
-import universitysystem.models.DateTime;
+import universitysystem.enums.LessonType;
+import universitysystem.models.core.DateTime;
 import java.io.*;
 import java.util.*;
 
@@ -59,7 +60,7 @@ public class Lesson {
         this.lessonType = lessonType;
     }
 
-    public LocalDateTime getDateTime() {
+    public DateTime getDateTime() {
         return dateTime;
     }
 
