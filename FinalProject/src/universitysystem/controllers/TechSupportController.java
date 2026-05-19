@@ -16,6 +16,8 @@ public class TechSupportController {
     private final TechSupportView techSupportView;
     private final AuthController authController;
     private final MessageController messageController;
+    private final NewsController newsController;
+    private final JournalController journalController;
     private final User currentUser;
 
     public TechSupportController(TechSupportService techSupportService) {
@@ -33,6 +35,8 @@ public class TechSupportController {
         this.techSupportView = techSupportView;
         this.authController = authController;
         this.messageController = messageController;
+        this.newsController = new NewsController(currentUser);
+        this.journalController = new JournalController(currentUser);
         this.currentUser = currentUser;
     }
 
@@ -69,6 +73,11 @@ public class TechSupportController {
                 openMessages();
                 return true;
             case 8:
+                newsController.run();
+                return true;
+            case 9:
+                journalController.run();
+                return true;
             case 0:
                 techSupportView.showMessage("Logout.");
                 return false;
@@ -126,22 +135,22 @@ public class TechSupportController {
     }
 
     public List<Request> getAllRequests() {
-        return techSupportService == null ? Collections.emptyList() : techSupportService.getAllRequests();
+        return techSupportService == null ? Collections.emptyList() : techSupportService.getAllRequests(currentUser);
     }
 
     public List<Request> getRequestsByStatus(RequestStatus status) {
-        return techSupportService == null ? Collections.emptyList() : techSupportService.getRequestsByStatus(status);
+        return techSupportService == null ? Collections.emptyList() : techSupportService.getRequestsByStatus(currentUser, status);
     }
 
     public boolean accept(int requestId) {
-        return techSupportService != null && techSupportService.acceptRequest(requestId);
+        return techSupportService != null && techSupportService.acceptRequest(currentUser, requestId);
     }
 
     public boolean reject(int requestId) {
-        return techSupportService != null && techSupportService.rejectRequest(requestId);
+        return techSupportService != null && techSupportService.rejectRequest(currentUser, requestId);
     }
 
     public boolean done(int requestId) {
-        return techSupportService != null && techSupportService.markAsDone(requestId);
+        return techSupportService != null && techSupportService.markAsDone(currentUser, requestId);
     }
 }

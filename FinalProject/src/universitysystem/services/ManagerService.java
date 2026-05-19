@@ -61,8 +61,14 @@ public class ManagerService {
         }
         if (!teacher.getCourses().contains(course)) {
             teacher.getCourses().add(course);
-            database.save();
         }
+        if (course.getLectureTeachers() == null) {
+            course.setLectureTeachers(new ArrayList<>());
+        }
+        if (!course.getLectureTeachers().contains(teacher)) {
+            course.getLectureTeachers().add(teacher);
+        }
+        database.save();
     }
 
     public void openCourseRegistration(Course course) {
@@ -108,6 +114,31 @@ public class ManagerService {
             total += student.getGpa();
         }
         return total / students.size();
+    }
+
+    public List<Course> getCourses() {
+        return new ArrayList<>(database.getCourses());
+    }
+
+    public Course getCourseByCode(String courseCode) {
+        if (courseCode == null) {
+            return null;
+        }
+        for (Course course : database.getCourses()) {
+            if (courseCode.equalsIgnoreCase(course.getCourseCode())) {
+                return course;
+            }
+        }
+        return null;
+    }
+
+    public Teacher getTeacherById(int teacherId) {
+        for (Teacher teacher : getTeachers()) {
+            if (teacher.getId() == teacherId) {
+                return teacher;
+            }
+        }
+        return null;
     }
 
     public List<Request> getRequests() {

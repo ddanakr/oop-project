@@ -1,6 +1,8 @@
 package universitysystem.controllers;
 
 import universitysystem.models.users.Manager;
+import universitysystem.models.academic.Course;
+import universitysystem.models.users.Teacher;
 import universitysystem.services.ManagerService;
 import universitysystem.utils.ConsoleUtils;
 import universitysystem.views.ManagerView;
@@ -73,6 +75,9 @@ public class ManagerController {
                 return true;
             case 6:
                 handleRequests();
+                return true;
+            case 7:
+                handleCourseManagement();
                 return true;
             case 0:
                 managerView.showMessage("Back to previous menu.");
@@ -148,6 +153,72 @@ public class ManagerController {
             if (running) {
                 ConsoleUtils.pressEnterToContinue();
             }
+        }
+    }
+
+    private void handleCourseManagement() {
+        boolean running = true;
+
+        while (running) {
+            managerView.showCourseManagementMenu();
+            int choice = managerView.readMenuChoice();
+
+            switch (choice) {
+                case 1:
+                    managerView.showCourses(managerService.getCourses());
+                    break;
+                case 2:
+                    assignCourseToTeacher();
+                    break;
+                case 3:
+                    setCourseRegistration(true);
+                    break;
+                case 4:
+                    setCourseRegistration(false);
+                    break;
+                case 0:
+                    running = false;
+                    break;
+                default:
+                    managerView.showError("Unknown option.");
+                    break;
+            }
+
+            if (running) {
+                ConsoleUtils.pressEnterToContinue();
+            }
+        }
+    }
+
+    private void assignCourseToTeacher() {
+        managerView.showCourses(managerService.getCourses());
+        String courseCode = managerView.readCourseCode();
+        managerView.showTeachers(managerService.getTeachersSortedAlphabetically());
+        int teacherId = managerView.readTeacherId();
+
+        Course course = managerService.getCourseByCode(courseCode);
+        Teacher teacher = managerService.getTeacherById(teacherId);
+        if (course == null || teacher == null) {
+            managerView.showError("Course or teacher was not found.");
+            return;
+        }
+        managerService.assignCourseToTeacher(course, teacher);
+        managerView.showMessage("Course assigned.");
+    }
+
+    private void setCourseRegistration(boolean open) {
+        managerView.showCourses(managerService.getCourses());
+        Course course = managerService.getCourseByCode(managerView.readCourseCode());
+        if (course == null) {
+            managerView.showError("Course was not found.");
+            return;
+        }
+        if (open) {
+            managerService.openCourseRegistration(course);
+            managerView.showMessage("Registration opened.");
+        } else {
+            managerService.closeCourseRegistration(course);
+            managerView.showMessage("Registration closed.");
         }
     }
 

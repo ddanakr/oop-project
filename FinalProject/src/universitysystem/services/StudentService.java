@@ -9,6 +9,7 @@ import universitysystem.models.academic.Course;
 import universitysystem.models.academic.Enrollment;
 import universitysystem.models.academic.Mark;
 import universitysystem.models.users.Student;
+import universitysystem.models.users.Teacher;
 import universitysystem.models.users.User;
 
 import java.util.ArrayList;
@@ -174,6 +175,48 @@ public class StudentService {
         return student != null
                 && course != null
                 && enrollmentService.calculateCurrentCredits(student) + course.getCredits() <= EnrollmentService.MAX_CREDITS;
+    }
+
+    public List<Course> getRegisteredCourses(Student student) {
+        if (student == null) {
+            return Collections.emptyList();
+        }
+        List<Course> courses = new ArrayList<Course>();
+        for (Enrollment enrollment : enrollmentService.getEnrollmentsByStudent(student)) {
+            if (enrollment.getCourse() != null && !courses.contains(enrollment.getCourse())) {
+                courses.add(enrollment.getCourse());
+            }
+        }
+        courses.sort(Comparator.comparing(Course::getCourseCode, Comparator.nullsLast(String::compareTo)));
+        return courses;
+    }
+
+    public List<Teacher> getTeachersForCourse(Course course) {
+        if (course == null) {
+            return Collections.emptyList();
+        }
+        List<Teacher> teachers = new ArrayList<Teacher>();
+        if (course.getLectureTeachers() != null) {
+            teachers.addAll(course.getLectureTeachers());
+        }
+        if (course.getPracticeTeachers() != null) {
+            for (Teacher teacher : course.getPracticeTeachers()) {
+                if (!teachers.contains(teacher)) {
+                    teachers.add(teacher);
+                }
+            }
+        }
+        teachers.sort(Comparator.comparing(Teacher::getLastName, Comparator.nullsLast(String::compareTo)));
+        return teachers;
+    }
+
+    public boolean rateTeacher(Student student, Teacher teacher, double rating) {
+        if (student == null || teacher == null || rating < 0.0 || rating > 5.0) {
+            return false;
+        }
+        teacher.setRate((teacher.getRate() + rating) / 2.0);
+        database.save();
+        return true;
     }
 
     private double toGpaPoint(double score) {

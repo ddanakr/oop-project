@@ -3,6 +3,7 @@ package universitysystem.views;
 import universitysystem.models.academic.Course;
 import universitysystem.models.academic.Enrollment;
 import universitysystem.models.academic.Mark;
+import universitysystem.enums.Urgency;
 import universitysystem.models.users.Student;
 import universitysystem.models.users.Teacher;
 import universitysystem.utils.ConsoleUtils;
@@ -23,8 +24,13 @@ public class TeacherView {
         System.out.println("1. View assigned courses");
         System.out.println("2. View students in a course");
         System.out.println("3. Put or update marks for students");
+        System.out.println("4. Send complaint about student");
+        System.out.println("5. News");
+        System.out.println("6. Journals");
+        System.out.println("7. Messages");
+        System.out.println("8. Research");
         System.out.println("0. Back / Logout");
-        return readInt("Choose an option: ", 0, 3);
+        return readInt("Choose an option: ", 0, 8);
     }
 
     /**
@@ -144,6 +150,20 @@ public class TeacherView {
         double att2 = readDouble("Attestation 2: ", 0.0, 100.0);
         double finalExam = readDouble("Final exam: ", 0.0, 100.0);
         return new Mark(att1, att2, finalExam);
+    }
+
+    public String askComplaintDescription() {
+        return ConsoleUtils.getInput("Complaint description: ");
+    }
+
+    public Urgency askUrgency() {
+        ConsoleUtils.printHeader("Urgency");
+        Urgency[] values = Urgency.values();
+        for (int i = 0; i < values.length; i++) {
+            System.out.println((i + 1) + ". " + values[i]);
+        }
+        int selected = readInt("Choose urgency: ", 1, values.length);
+        return values[selected - 1];
     }
 
     /**

@@ -25,6 +25,8 @@ public class AdminView {
         System.out.println("6. View logs");
         System.out.println("7. Change my password");
         System.out.println("8. Messages");
+        System.out.println("9. News");
+        System.out.println("10. Journals");
         System.out.println("0. Logout");
     }
 

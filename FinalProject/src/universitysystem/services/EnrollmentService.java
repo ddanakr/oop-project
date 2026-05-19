@@ -302,7 +302,7 @@ public class EnrollmentService {
     }
 
     private void saveDatabase() {
-        invokeNoArgDatabaseMethod("save");
+        database.save();
     }
 
     @SuppressWarnings("unchecked")
@@ -318,12 +318,4 @@ public class EnrollmentService {
         }
     }
 
-    private void invokeNoArgDatabaseMethod(String methodName) {
-        try {
-            Method method = database.getClass().getMethod(methodName);
-            method.invoke(database);
-        } catch (Exception ignored) {
-            // Database persistence method is optional in the current skeleton.
-        }
-    }
 }

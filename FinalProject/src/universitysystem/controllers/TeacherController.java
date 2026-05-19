@@ -1,15 +1,21 @@
 package universitysystem.controllers;
 
 import universitysystem.database.Database;
+import universitysystem.enums.Urgency;
 import universitysystem.models.academic.Course;
 import universitysystem.models.academic.Enrollment;
 import universitysystem.models.academic.Mark;
+import universitysystem.models.research.Researcher;
 import universitysystem.models.users.Student;
 import universitysystem.models.users.Teacher;
+import universitysystem.models.users.User;
 import universitysystem.services.EnrollmentService;
+import universitysystem.services.InMemoryMessageService;
 import universitysystem.services.TeacherService;
+import universitysystem.views.MessageView;
 import universitysystem.views.TeacherView;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -21,6 +27,10 @@ public class TeacherController {
     private final TeacherService teacherService;
     private final EnrollmentService enrollmentService;
     private final TeacherView teacherView;
+    private final NewsController newsController;
+    private final JournalController journalController;
+    private final MessageController messageController;
+    private final ResearchController researchController;
 
     public TeacherController(Teacher teacher) {
         this(
@@ -28,8 +38,34 @@ public class TeacherController {
                 Database.getInstance(),
                 new TeacherService(),
                 new EnrollmentService(),
-                new TeacherView()
+                new TeacherView(),
+                new NewsController(teacher),
+                new JournalController(teacher),
+                new MessageController(new InMemoryMessageService(Database.getInstance()), new MessageView()),
+                new ResearchController(teacher)
         );
+    }
+
+    public TeacherController(
+            Teacher teacher,
+            Database database,
+            TeacherService teacherService,
+            EnrollmentService enrollmentService,
+            TeacherView teacherView,
+            NewsController newsController,
+            JournalController journalController,
+            MessageController messageController,
+            ResearchController researchController
+    ) {
+        this.teacher = teacher;
+        this.database = database;
+        this.teacherService = teacherService;
+        this.enrollmentService = enrollmentService;
+        this.teacherView = teacherView;
+        this.newsController = newsController;
+        this.journalController = journalController;
+        this.messageController = messageController;
+        this.researchController = researchController;
     }
 
     public TeacherController(
@@ -39,11 +75,17 @@ public class TeacherController {
             EnrollmentService enrollmentService,
             TeacherView teacherView
     ) {
-        this.teacher = teacher;
-        this.database = database;
-        this.teacherService = teacherService;
-        this.enrollmentService = enrollmentService;
-        this.teacherView = teacherView;
+        this(
+                teacher,
+                database,
+                teacherService,
+                enrollmentService,
+                teacherView,
+                new NewsController(teacher),
+                new JournalController(teacher),
+                new MessageController(new InMemoryMessageService(database), new MessageView()),
+                new ResearchController(teacher)
+        );
     }
 
     /**
@@ -66,6 +108,21 @@ public class TeacherController {
                     break;
                 case 3:
                     handlePutOrUpdateMarks();
+                    break;
+                case 4:
+                    handleSendComplaint();
+                    break;
+                case 5:
+                    newsController.run();
+                    break;
+                case 6:
+                    journalController.run();
+                    break;
+                case 7:
+                    openMessages();
+                    break;
+                case 8:
+                    openResearch();
                     break;
                 case 0:
                     running = false;
@@ -135,6 +192,28 @@ public class TeacherController {
         teacherView.waitForEnter();
     }
 
+    public void handleSendComplaint() {
+        Course course = chooseAssignedCourse();
+        if (course == null) {
+            return;
+        }
+        try {
+            List<Student> students = teacherService.viewStudentsPerCourse(teacher, course);
+            teacherView.displayStudents(students);
+            int selectedIndex = teacherView.askEnrollmentSelection(students.size());
+            if (selectedIndex < 0) {
+                return;
+            }
+            String description = teacherView.askComplaintDescription();
+            Urgency urgency = teacherView.askUrgency();
+            teacherService.sendComplaint(teacher, students.get(selectedIndex), description, urgency);
+            teacherView.showSuccess("Complaint sent.");
+        } catch (IllegalArgumentException e) {
+            teacherView.showError(e.getMessage());
+        }
+        teacherView.waitForEnter();
+    }
+
     /**
      * Shared helper for teacher menu options that need one assigned course.
      */
@@ -146,6 +225,20 @@ public class TeacherController {
             return null;
         }
         return courses.get(selectedIndex);
+    }
+
+    private void openMessages() {
+        List<User> users = database == null || database.getUsers() == null ? Collections.emptyList() : database.getUsers();
+        messageController.run(teacher, users);
+    }
+
+    private void openResearch() {
+        if (!(teacher instanceof Researcher)) {
+            teacherView.showError("Current teacher is not a researcher.");
+            teacherView.waitForEnter();
+            return;
+        }
+        researchController.run();
     }
 
     /**

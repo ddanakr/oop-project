@@ -1,6 +1,7 @@
 package universitysystem.views;
 
 import universitysystem.models.requests.Request;
+import universitysystem.models.academic.Course;
 import universitysystem.models.users.Student;
 import universitysystem.models.users.Teacher;
 import universitysystem.utils.ConsoleUtils;
@@ -18,6 +19,7 @@ public class ManagerView {
         System.out.println("4. Teachers");
         System.out.println("5. Academic performance report");
         System.out.println("6. Requests");
+        System.out.println("7. Course management");
         System.out.println("0. Back");
     }
 
@@ -36,12 +38,29 @@ public class ManagerView {
         System.out.println("0. Back");
     }
 
+    public void showCourseManagementMenu() {
+        ConsoleUtils.printHeader("Course Management");
+        System.out.println("1. Show courses");
+        System.out.println("2. Assign course to teacher");
+        System.out.println("3. Open course registration");
+        System.out.println("4. Close course registration");
+        System.out.println("0. Back");
+    }
+
     public int readMenuChoice() {
         return ConsoleUtils.readInt("Choose option: ");
     }
 
     public int readRequestId() {
         return ConsoleUtils.readInt("Request id: ");
+    }
+
+    public String readCourseCode() {
+        return ConsoleUtils.readLine("Course code: ");
+    }
+
+    public int readTeacherId() {
+        return ConsoleUtils.readInt("Teacher id: ");
     }
 
     public void showStudents(List<Student> students) {
@@ -78,6 +97,25 @@ public class ManagerView {
 
         ConsoleUtils.printTable(
                 Arrays.asList("ID", "Name", "Last name", "Position", "Rate"),
+                rows
+        );
+    }
+
+    public void showCourses(List<Course> courses) {
+        List<List<String>> rows = new ArrayList<>();
+        for (Course course : courses) {
+            rows.add(Arrays.asList(
+                    valueOrDash(course.getCourseCode()),
+                    valueOrDash(course.getTitle()),
+                    course.getType() == null ? "-" : course.getType().name(),
+                    String.valueOf(course.getCredits()),
+                    course.isRegistrationOpen() ? "open" : "closed",
+                    String.valueOf(course.getCapacity())
+            ));
+        }
+
+        ConsoleUtils.printTable(
+                Arrays.asList("Code", "Title", "Type", "Credits", "Registration", "Capacity"),
                 rows
         );
     }

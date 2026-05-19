@@ -5,6 +5,7 @@ import universitysystem.models.academic.Course;
 import universitysystem.models.academic.Enrollment;
 import universitysystem.models.academic.Mark;
 import universitysystem.models.users.Student;
+import universitysystem.models.users.Teacher;
 import universitysystem.utils.ConsoleUtils;
 
 import java.util.List;
@@ -23,8 +24,14 @@ public class StudentView {
         System.out.println("1. View available courses and register");
         System.out.println("2. View marks for enrolled courses");
         System.out.println("3. Print transcript with GPA");
+        System.out.println("4. View teachers for my course");
+        System.out.println("5. Rate teacher");
+        System.out.println("6. News");
+        System.out.println("7. Journals");
+        System.out.println("8. Messages");
+        System.out.println("9. Research");
         System.out.println("0. Back / Logout");
-        return readInt("Choose an option: ", 0, 3);
+        return readInt("Choose an option: ", 0, 9);
     }
 
     /**
@@ -52,6 +59,26 @@ public class StudentView {
         }
     }
 
+    public void displayCourses(List<Course> courses) {
+        System.out.println();
+        System.out.println("Courses");
+        if (courses == null || courses.isEmpty()) {
+            System.out.println("No courses found.");
+            return;
+        }
+        System.out.printf("%-5s %-12s %-30s %-8s%n", "No.", "Code", "Title", "Credits");
+        for (int i = 0; i < courses.size(); i++) {
+            Course course = courses.get(i);
+            System.out.printf(
+                    "%-5d %-12s %-30s %-8d%n",
+                    i + 1,
+                    course.getCourseCode(),
+                    course.getTitle(),
+                    course.getCredits()
+            );
+        }
+    }
+
     /**
      * Menu option 1 input: asks which course the student wants to register for.
      */
@@ -62,6 +89,41 @@ public class StudentView {
         System.out.println("Enter 0 to cancel.");
         int selected = readInt("Select course number: ", 0, courseCount);
         return selected == 0 ? -1 : selected - 1;
+    }
+
+    public void displayTeachers(List<Teacher> teachers) {
+        System.out.println();
+        System.out.println("Teachers");
+        if (teachers == null || teachers.isEmpty()) {
+            System.out.println("No teachers found for this course.");
+            return;
+        }
+        System.out.printf("%-5s %-8s %-20s %-20s %-16s %-8s%n", "No.", "ID", "Name", "Last name", "Position", "Rate");
+        for (int i = 0; i < teachers.size(); i++) {
+            Teacher teacher = teachers.get(i);
+            System.out.printf(
+                    "%-5d %-8d %-20s %-20s %-16s %-8.2f%n",
+                    i + 1,
+                    teacher.getId(),
+                    teacher.getName(),
+                    teacher.getLastName(),
+                    teacher.getPosition() == null ? "N/A" : teacher.getPosition().name(),
+                    teacher.getRate()
+            );
+        }
+    }
+
+    public int askTeacherSelection(int teacherCount) {
+        if (teacherCount <= 0) {
+            return -1;
+        }
+        System.out.println("Enter 0 to cancel.");
+        int selected = readInt("Select teacher number: ", 0, teacherCount);
+        return selected == 0 ? -1 : selected - 1;
+    }
+
+    public double askTeacherRating() {
+        return readDouble("Rating from 0 to 5: ", 0.0, 5.0);
     }
 
     /**
@@ -144,6 +206,21 @@ public class StudentView {
             String input = ConsoleUtils.getInput(prompt).trim();
             try {
                 int value = Integer.parseInt(input);
+                if (value >= min && value <= max) {
+                    return value;
+                }
+                System.out.println("Please enter a number from " + min + " to " + max + ".");
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a valid number.");
+            }
+        }
+    }
+
+    private double readDouble(String prompt, double min, double max) {
+        while (true) {
+            String input = ConsoleUtils.getInput(prompt).trim();
+            try {
+                double value = Double.parseDouble(input);
                 if (value >= min && value <= max) {
                     return value;
                 }

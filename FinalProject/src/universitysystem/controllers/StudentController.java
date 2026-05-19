@@ -7,11 +7,17 @@ import universitysystem.exceptions.MaxRetakesException;
 import universitysystem.enums.Semester;
 import universitysystem.models.academic.Course;
 import universitysystem.models.academic.Enrollment;
+import universitysystem.models.research.Researcher;
 import universitysystem.models.users.Student;
+import universitysystem.models.users.Teacher;
+import universitysystem.models.users.User;
 import universitysystem.services.EnrollmentService;
+import universitysystem.services.InMemoryMessageService;
 import universitysystem.services.StudentService;
+import universitysystem.views.MessageView;
 import universitysystem.views.StudentView;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -23,6 +29,10 @@ public class StudentController {
     private final StudentService studentService;
     private final EnrollmentService enrollmentService;
     private final StudentView studentView;
+    private final NewsController newsController;
+    private final JournalController journalController;
+    private final MessageController messageController;
+    private final ResearchController researchController;
 
     public StudentController(Student student) {
         this(
@@ -30,8 +40,34 @@ public class StudentController {
                 Database.getInstance(),
                 new StudentService(),
                 new EnrollmentService(),
-                new StudentView()
+                new StudentView(),
+                new NewsController(student),
+                new JournalController(student),
+                new MessageController(new InMemoryMessageService(Database.getInstance()), new MessageView()),
+                student instanceof Researcher ? new ResearchController((Researcher) student) : null
         );
+    }
+
+    public StudentController(
+            Student student,
+            Database database,
+            StudentService studentService,
+            EnrollmentService enrollmentService,
+            StudentView studentView,
+            NewsController newsController,
+            JournalController journalController,
+            MessageController messageController,
+            ResearchController researchController
+    ) {
+        this.student = student;
+        this.database = database;
+        this.studentService = studentService;
+        this.enrollmentService = enrollmentService;
+        this.studentView = studentView;
+        this.newsController = newsController;
+        this.journalController = journalController;
+        this.messageController = messageController;
+        this.researchController = researchController;
     }
 
     public StudentController(
@@ -41,11 +77,17 @@ public class StudentController {
             EnrollmentService enrollmentService,
             StudentView studentView
     ) {
-        this.student = student;
-        this.database = database;
-        this.studentService = studentService;
-        this.enrollmentService = enrollmentService;
-        this.studentView = studentView;
+        this(
+                student,
+                database,
+                studentService,
+                enrollmentService,
+                studentView,
+                new NewsController(student),
+                new JournalController(student),
+                new MessageController(new InMemoryMessageService(database), new MessageView()),
+                student instanceof Researcher ? new ResearchController((Researcher) student) : null
+        );
     }
 
     /**
@@ -68,6 +110,24 @@ public class StudentController {
                     break;
                 case 3:
                     handlePrintTranscript();
+                    break;
+                case 4:
+                    handleViewTeachersForCourse();
+                    break;
+                case 5:
+                    handleRateTeacher();
+                    break;
+                case 6:
+                    newsController.run();
+                    break;
+                case 7:
+                    journalController.run();
+                    break;
+                case 8:
+                    openMessages();
+                    break;
+                case 9:
+                    openResearch();
                     break;
                 case 0:
                     running = false;
@@ -118,6 +178,55 @@ public class StudentController {
     public void handlePrintTranscript() {
         studentView.displayTranscript(studentService.printTranscript(student));
         studentView.waitForEnter();
+    }
+
+    public void handleViewTeachersForCourse() {
+        Course course = chooseRegisteredCourse();
+        if (course == null) {
+            return;
+        }
+        studentView.displayTeachers(studentService.getTeachersForCourse(course));
+        studentView.waitForEnter();
+    }
+
+    public void handleRateTeacher() {
+        Course course = chooseRegisteredCourse();
+        if (course == null) {
+            return;
+        }
+        List<Teacher> teachers = studentService.getTeachersForCourse(course);
+        studentView.displayTeachers(teachers);
+        int selectedIndex = studentView.askTeacherSelection(teachers.size());
+        if (selectedIndex < 0) {
+            return;
+        }
+        boolean rated = studentService.rateTeacher(student, teachers.get(selectedIndex), studentView.askTeacherRating());
+        studentView.showSuccess(rated ? "Teacher rated." : "Could not rate teacher.");
+        studentView.waitForEnter();
+    }
+
+    private Course chooseRegisteredCourse() {
+        List<Course> courses = studentService.getRegisteredCourses(student);
+        studentView.displayCourses(courses);
+        int selectedIndex = studentView.askCourseSelection(courses.size());
+        if (selectedIndex < 0) {
+            return null;
+        }
+        return courses.get(selectedIndex);
+    }
+
+    private void openMessages() {
+        List<User> users = database == null || database.getUsers() == null ? Collections.emptyList() : database.getUsers();
+        messageController.run(student, users);
+    }
+
+    private void openResearch() {
+        if (researchController == null) {
+            studentView.showError("Current student is not a researcher.");
+            studentView.waitForEnter();
+            return;
+        }
+        researchController.run();
     }
 
     /**

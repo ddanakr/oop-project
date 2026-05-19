@@ -13,6 +13,8 @@ public class AdminController {
     private final AdminView adminView;
     private final AuthController authController;
     private final MessageController messageController;
+    private final NewsController newsController;
+    private final JournalController journalController;
     private final User actor;
 
     public AdminController(AdminService adminService, User actor) {
@@ -30,6 +32,8 @@ public class AdminController {
         this.adminView = adminView;
         this.authController = authController;
         this.messageController = messageController;
+        this.newsController = new NewsController(actor);
+        this.journalController = new JournalController(actor);
         this.actor = actor;
     }
 
@@ -69,6 +73,11 @@ public class AdminController {
                 openMessages();
                 return true;
             case 9:
+                newsController.run();
+                return true;
+            case 10:
+                journalController.run();
+                return true;
             case 0:
                 adminView.showMessage("Logout.");
                 return false;

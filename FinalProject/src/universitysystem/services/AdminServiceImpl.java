@@ -39,6 +39,7 @@ public class AdminServiceImpl implements AdminService {
         }
         db.getUsers().add(user);
         log(actor, "Created user: " + safeLogin(user));
+        db.save();
         return true;
     }
 
@@ -53,6 +54,7 @@ public class AdminServiceImpl implements AdminService {
             if (existing != null && existing.getId() == user.getId()) {
                 db.getUsers().set(i, user);
                 log(actor, "Updated user: " + safeLogin(user) + " (id=" + user.getId() + ")");
+                db.save();
                 return true;
             }
         }
@@ -69,6 +71,7 @@ public class AdminServiceImpl implements AdminService {
         boolean removed = db.getUsers().removeIf(u -> u != null && u.getId() == userId);
         if (removed) {
             log(actor, "Deleted user: " + safeLogin(existing) + " (id=" + userId + ")");
+            db.save();
         }
         return removed;
     }
@@ -79,6 +82,7 @@ public class AdminServiceImpl implements AdminService {
         if (user == null) return false;
         user.setPassword("");
         log(actor, "Reset password for user: " + safeLogin(user) + " (id=" + userId + ")");
+        Database.getInstance().save();
         return true;
     }
 

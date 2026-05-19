@@ -1,9 +1,13 @@
 package universitysystem.services;
 
 import universitysystem.database.Database;
+import universitysystem.enums.RequestType;
+import universitysystem.enums.Urgency;
 import universitysystem.models.academic.Course;
 import universitysystem.models.academic.Enrollment;
 import universitysystem.models.academic.Mark;
+import universitysystem.models.requests.Request;
+import universitysystem.models.users.Manager;
 import universitysystem.models.users.Student;
 import universitysystem.models.users.Teacher;
 import universitysystem.models.users.User;
@@ -145,6 +149,27 @@ public class TeacherService {
         return courses;
     }
 
+    public Request sendComplaint(Teacher teacher, Student student, String description, Urgency urgency) {
+        if (teacher == null) {
+            throw new IllegalArgumentException("Teacher is required.");
+        }
+        if (student == null) {
+            throw new IllegalArgumentException("Student is required.");
+        }
+        if (description == null || description.trim().isEmpty()) {
+            throw new IllegalArgumentException("Complaint description cannot be empty.");
+        }
+        Urgency safeUrgency = urgency == null ? Urgency.MEDIUM : urgency;
+        User dean = findDean();
+        return new RequestServiceImpl().createRequest(
+                teacher,
+                RequestType.COMPLAINT,
+                description,
+                dean,
+                safeUrgency
+        );
+    }
+
     /**
      * Throws IllegalArgumentException when the teacher cannot grade the course.
      */
@@ -152,6 +177,18 @@ public class TeacherService {
         if (!isTeacherAuthorized(teacher, course)) {
             throw new IllegalArgumentException("Teacher is not assigned to this course.");
         }
+    }
+
+    private User findDean() {
+        if (database.getUsers() == null) {
+            return null;
+        }
+        for (User user : database.getUsers()) {
+            if (user instanceof Manager && ((Manager) user).getType() == Manager.ManagerType.DEAN) {
+                return user;
+            }
+        }
+        return null;
     }
 
     private Enrollment requireEnrollment(Student student, Course course) {
