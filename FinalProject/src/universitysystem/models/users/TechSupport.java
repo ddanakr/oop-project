@@ -10,13 +10,6 @@ import universitysystem.models.requests.Request;
  */
 public class TechSupport extends Employee {
 
-    /**
-     * Default constructor
-     */
-    public TechSupport() {
-        this.requests = new ArrayList<>();
-        this.activeRequests = new ArrayList<>();
-    }
 
     /**
      * 
@@ -27,6 +20,15 @@ public class TechSupport extends Employee {
      * 
      */
     private List<Request> activeRequests;
+    
+    
+    /**
+     * Default constructor
+     */
+    public TechSupport() {
+        this.requests = new ArrayList<>();
+        this.activeRequests = new ArrayList<>();
+    }
 
     public List<Request> getRequests() {
         return requests;

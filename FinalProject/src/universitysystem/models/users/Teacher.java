@@ -16,25 +16,6 @@ import java.util.*;
  */
 public class Teacher extends Employee implements Researcher {
 
-    /**
-     * Default constructor
-     */
-    public Teacher() {
-        this.courses = new ArrayList<>();
-        this.papers = new ArrayList<>();
-        this.projects = new ArrayList<>();
-    }
-
-    /**
-     * Full constructor
-     */
-    public Teacher(TeacherPosition position, List<Course> courses, double rate) {
-        this.position = position;
-        this.courses = courses != null ? courses : new ArrayList<>();
-        this.rate = rate;
-        this.papers = new ArrayList<>();
-        this.projects = new ArrayList<>();
-    }
 
     /**
      * 
@@ -60,6 +41,26 @@ public class Teacher extends Employee implements Researcher {
      * 
      */
     private List<ResearchProject> projects;
+    
+    /**
+     * Default constructor
+     */
+    public Teacher() {
+        this.courses = new ArrayList<>();
+        this.papers = new ArrayList<>();
+        this.projects = new ArrayList<>();
+    }
+
+    /**
+     * Full constructor
+     */
+    public Teacher(TeacherPosition position, List<Course> courses, double rate) {
+        this.position = position;
+        this.courses = courses != null ? courses : new ArrayList<>();
+        this.rate = rate;
+        this.papers = new ArrayList<>();
+        this.projects = new ArrayList<>();
+    }
 
     public TeacherPosition getPosition() {
         return position;

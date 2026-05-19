@@ -13,26 +13,6 @@ import java.util.*;
  */
 public class GraduateStudent extends Student implements Researcher {
 
-    /**
-     * Default constructor
-     */
-    public GraduateStudent() {
-        this.diplomaProject = new ArrayList<>();
-        this.publicationList = new ArrayList<>();
-    }
-
-    /**
-     * Full constructor
-     */
-    public GraduateStudent(int year, Degree degree, String speciality, double gpa, int credits,
-                           Researcher supervisor, List<ResearchPaper> diplomaProject,
-                           String researchTopic, List<ResearchPaper> publicationList) {
-        super(year, degree, speciality, gpa, credits);
-        this.supervisor = supervisor;
-        this.diplomaProject = diplomaProject != null ? diplomaProject : new ArrayList<>();
-        this.researchTopic = researchTopic;
-        this.publicationList = publicationList != null ? publicationList : new ArrayList<>();
-    }
 
     /**
      * 
@@ -53,6 +33,27 @@ public class GraduateStudent extends Student implements Researcher {
      * 
      */
     private List<ResearchPaper> publicationList;
+    
+    /**
+     * Default constructor
+     */
+    public GraduateStudent() {
+        this.diplomaProject = new ArrayList<>();
+        this.publicationList = new ArrayList<>();
+    }
+
+    /**
+     * Full constructor
+     */
+    public GraduateStudent(int year, Degree degree, String speciality, double gpa, int credits,
+                           Researcher supervisor, List<ResearchPaper> diplomaProject,
+                           String researchTopic, List<ResearchPaper> publicationList) {
+        super(year, degree, speciality, gpa, credits);
+        this.supervisor = supervisor;
+        this.diplomaProject = diplomaProject != null ? diplomaProject : new ArrayList<>();
+        this.researchTopic = researchTopic;
+        this.publicationList = publicationList != null ? publicationList : new ArrayList<>();
+    }
 
     public Researcher getSupervisor() {
         return supervisor;

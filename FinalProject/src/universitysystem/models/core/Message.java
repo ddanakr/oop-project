@@ -11,20 +11,6 @@ public class Message implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Default constructor
-     */
-    public Message() {
-    }
-
-    public Message(User from, User to, String text, DateTime sentAt, boolean isRead) {
-        this.from = from;
-        this.to = to;
-        this.text = text;
-        this.sentAt = sentAt;
-        this.isRead = isRead;
-    }
-
-    /**
      * 
      */
     private User from;
@@ -48,6 +34,21 @@ public class Message implements Serializable {
      * 
      */
     private boolean isRead;
+    
+    /**
+     * Default constructor
+     */
+    public Message() {
+    }
+
+    public Message(User from, User to, String text, DateTime sentAt, boolean isRead) {
+        this.from = from;
+        this.to = to;
+        this.text = text;
+        this.sentAt = sentAt;
+        this.isRead = isRead;
+    }
+    
 
     public User getFrom() {
         return from;

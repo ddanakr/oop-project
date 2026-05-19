@@ -13,12 +13,6 @@ public class Signature implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Default constructor
-     */
-    public Signature() {
-    }
-
-    /**
      * 
      */
     private User signer;
@@ -33,7 +27,11 @@ public class Signature implements Serializable {
      */
     private DateTime signedAt ;
     
-    
+    /**
+     * Default constructor
+     */
+    public Signature() {
+    }
 
     public Signature(User signer, SignerRole signerRole, DateTime signedAt) {
         this.signer = signer;

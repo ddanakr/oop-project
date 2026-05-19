@@ -12,12 +12,6 @@ import java.util.*;
 public class Enrollment implements Serializable {
 
     /**
-     * Default constructor
-     */
-    public Enrollment() {
-    }
-
-    /**
      * 
      */
     private Student student;
@@ -46,6 +40,12 @@ public class Enrollment implements Serializable {
      * 
      */
     private int attemptNumber;
+    
+    /**
+     * Default constructor
+     */
+    public Enrollment() {
+    }
 
     public Enrollment(Student student, Course course, Semester semester, int year, Mark mark, int attemptNumber) {
         this.student = student;

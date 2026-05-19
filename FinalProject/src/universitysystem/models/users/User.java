@@ -12,11 +12,6 @@ import java.util.*;
  */
 public abstract class User implements Subscriber, Serializable {
 
-    /**
-     * Default constructor
-     */
-    public User() {
-    }
 
     /**
      * 
@@ -62,6 +57,12 @@ public abstract class User implements Subscriber, Serializable {
      * 
      */
     private String gender;
+    
+    /**
+     * Default constructor
+     */
+    public User() {
+    }
 
 
     protected User(

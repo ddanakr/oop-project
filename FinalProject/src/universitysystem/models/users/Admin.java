@@ -11,6 +11,11 @@ import java.util.*;
  */
 public class Admin extends Employee {
 
+    /**
+     * 
+     */
+    private List<User> users;
+    
 	/**
      * Default constructor
      */
@@ -18,10 +23,6 @@ public class Admin extends Employee {
         this.users = new ArrayList<>();
     }
 
-    /**
-     * 
-     */
-    private List<User> users;
 
     public Admin(
             String name,

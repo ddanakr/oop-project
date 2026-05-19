@@ -8,12 +8,6 @@ import java.util.*;
  */
 public abstract class Employee extends User {
 
-	/**
-     * Default constructor
-     */
-    public Employee() {
-    }
-
     /**
      * 
      */
@@ -23,6 +17,12 @@ public abstract class Employee extends User {
      * 
      */
     private Date hireDate;
+    
+    /**
+     * Default constructor
+     */
+    public Employee() {
+    }
 
     protected Employee(
             String name,

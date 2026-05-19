@@ -10,6 +10,21 @@ public class Mark implements Comparable<Mark>, Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 
+     */
+    private double att1;
+
+    /**
+     * 
+     */
+    private double att2;
+
+    /**
+     * 
+     */
+    private double finalExam;
+    
+    /**
      * Default constructor
      */
     public Mark() {
@@ -24,20 +39,6 @@ public class Mark implements Comparable<Mark>, Serializable {
         this.finalExam = finalExam;
     }
 
-    /**
-     * 
-     */
-    private double att1;
-
-    /**
-     * 
-     */
-    private double att2;
-
-    /**
-     * 
-     */
-    private double finalExam;
 
     public double getAtt1() {
         return att1;

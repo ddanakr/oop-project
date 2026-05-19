@@ -59,6 +59,8 @@ public class AdminView {
         readRequiredUserFields(user);
         if (user instanceof Student) {
             readStudentFields((Student) user);
+        } else if (user instanceof Manager) {
+            readManagerFields((Manager) user, false);
         }
         return user;
     }
@@ -109,6 +111,10 @@ public class AdminView {
         if (!gender.trim().isEmpty()) {
             user.setGender(gender);
         }
+
+        if (user instanceof Manager) {
+            readManagerFields((Manager) user, true);
+        }
     }
 
     public PasswordInput readPasswordInput() {
@@ -118,7 +124,7 @@ public class AdminView {
     }
 
     public void showUsers(List<User> users) {
-        List<String> headers = Arrays.asList("ID", "Login", "Type", "Name", "Last name");
+        List<String> headers = Arrays.asList("ID", "Login", "Type", "Role", "Name", "Last name");
         List<List<String>> rows = new ArrayList<>();
         if (users != null) {
             for (User user : users) {
@@ -129,6 +135,7 @@ public class AdminView {
                         String.valueOf(user.getId()),
                         String.valueOf(user.getLogin()),
                         user.getClass().getSimpleName(),
+                        getRoleText(user),
                         String.valueOf(user.getName()),
                         String.valueOf(user.getLastName())
                 ));
@@ -204,6 +211,43 @@ public class AdminView {
             student.setDegree(Degree.values()[degreeChoice - 1]);
         }
         student.setSpeciality(ConsoleUtils.getInput("Speciality: "));
+    }
+
+    private void readManagerFields(Manager manager, boolean allowKeepCurrent) {
+        ConsoleUtils.printHeader("Manager Type");
+        Manager.ManagerType[] types = Manager.ManagerType.values();
+        for (int i = 0; i < types.length; i++) {
+            System.out.println((i + 1) + ". " + types[i]);
+        }
+        if (allowKeepCurrent) {
+            System.out.println("0. Keep current (" + (manager.getType() == null ? "none" : manager.getType()) + ")");
+        }
+        int min = allowKeepCurrent ? 0 : 1;
+        int typeChoice = ConsoleUtils.getIntInput("Manager type: ");
+        if (typeChoice == 0 && allowKeepCurrent) {
+            return;
+        }
+        if (typeChoice >= min && typeChoice <= types.length) {
+            manager.setType(types[typeChoice - 1]);
+        } else {
+            showError("Invalid manager type.");
+        }
+    }
+
+    private String getRoleText(User user) {
+        if (user instanceof Manager) {
+            Manager.ManagerType type = ((Manager) user).getType();
+            return type == null ? "-" : type.name();
+        }
+        if (user instanceof Teacher) {
+            Teacher.TeacherPosition position = ((Teacher) user).getPosition();
+            return position == null ? "-" : position.name();
+        }
+        if (user instanceof Student) {
+            Degree degree = ((Student) user).getDegree();
+            return degree == null ? "-" : degree.name();
+        }
+        return "-";
     }
 
     private String safe(String value) {

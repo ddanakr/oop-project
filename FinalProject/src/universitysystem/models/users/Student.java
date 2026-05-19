@@ -16,11 +16,6 @@ import universitysystem.models.requests.Request;
  */
 public class Student extends User {
 
-    /**
-     * Default constructor
-     */
-    public Student() {
-    }
 
     /**
      * 
@@ -46,6 +41,12 @@ public class Student extends User {
      * 
      */
     private int credits;
+    
+    /**
+     * Default constructor
+     */
+    public Student() {
+    }
 
     /**
      * Full constructor

@@ -14,28 +14,6 @@ import java.util.*;
  */
 public class Request implements Serializable {
 
-    /**
-     * Default constructor
-     */
-    public Request() {
-        this.status = RequestStatus.NEW;
-        this.signatures = new ArrayList<>();
-    }
-
-    /**
-     * Full constructor
-     */
-    public Request(int requestId, User sender, RequestType requestType, String description, User target, Urgency urgency, List<Signature> signatures, DateTime createdAt) {
-        this.requestId = requestId;
-        this.sender = sender;
-        this.requestType = requestType;
-        this.description = description;
-        this.target = target;
-        this.status = RequestStatus.NEW;
-        this.urgency = urgency;
-        this.signatures = signatures != null ? signatures : new ArrayList<>();
-        this.createdAt = createdAt;
-    }
 
     /**
      * 
@@ -81,6 +59,30 @@ public class Request implements Serializable {
      * 
      */
     private DateTime createdAt;
+    
+    /**
+     * Default constructor
+     */
+    public Request() {
+        this.status = RequestStatus.NEW;
+        this.signatures = new ArrayList<>();
+    }
+
+    /**
+     * Full constructor
+     */
+    public Request(int requestId, User sender, RequestType requestType, String description, User target, Urgency urgency, List<Signature> signatures, DateTime createdAt) {
+        this.requestId = requestId;
+        this.sender = sender;
+        this.requestType = requestType;
+        this.description = description;
+        this.target = target;
+        this.status = RequestStatus.NEW;
+        this.urgency = urgency;
+        this.signatures = signatures != null ? signatures : new ArrayList<>();
+        this.createdAt = createdAt;
+    }
+    
 
     public int getRequestId() {
         return requestId;

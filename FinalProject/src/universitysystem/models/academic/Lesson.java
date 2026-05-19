@@ -12,12 +12,6 @@ public class Lesson implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Default constructor
-     */
-    public Lesson() {
-    }
-
-    /**
      * 
      */
     private Course course;
@@ -37,6 +31,11 @@ public class Lesson implements Serializable {
      */
     private  String room;
     
+    /**
+     * Default constructor
+     */
+    public Lesson() {
+    }
     
     public Lesson(Course course, LessonType lessonType, DateTime dateTime, String room) {
         this.course = course;

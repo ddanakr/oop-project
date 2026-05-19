@@ -12,31 +12,6 @@ import java.util.*;
 public class Course implements Serializable{
 
     /**
-     * Default constructor
-     */
-    public Course() {
-        this.enrollments = new ArrayList<>();
-        this.lectureTeachers = new ArrayList<>();
-        this.practiceTeachers = new ArrayList<>();
-    }
-
-    /**
-     * Full constructor
-     */
-    public Course(String courseCode, String title, CourseType type, int credits, int capacity,
-                  List<Enrollment> enrollments, List<Teacher> lectureTeachers, List<Teacher> practiceTeachers) {
-        this.courseCode = courseCode;
-        this.title = title;
-        this.type = type;
-        this.credits = credits;
-        this.capacity = capacity;
-        this.isRegistrationOpen = false;
-        this.enrollments = enrollments != null ? enrollments : new ArrayList<>();
-        this.lectureTeachers = lectureTeachers != null ? lectureTeachers : new ArrayList<>();
-        this.practiceTeachers = practiceTeachers != null ? practiceTeachers : new ArrayList<>();
-    }
-
-    /**
      * 
      */
     private String courseCode;
@@ -80,6 +55,31 @@ public class Course implements Serializable{
      * 
      */
     private List<Teacher> practiceTeachers;
+    
+    /**
+     * Default constructor
+     */
+    public Course() {
+        this.enrollments = new ArrayList<>();
+        this.lectureTeachers = new ArrayList<>();
+        this.practiceTeachers = new ArrayList<>();
+    }
+
+    /**
+     * Full constructor
+     */
+    public Course(String courseCode, String title, CourseType type, int credits, int capacity,
+                  List<Enrollment> enrollments, List<Teacher> lectureTeachers, List<Teacher> practiceTeachers) {
+        this.courseCode = courseCode;
+        this.title = title;
+        this.type = type;
+        this.credits = credits;
+        this.capacity = capacity;
+        this.isRegistrationOpen = false;
+        this.enrollments = enrollments != null ? enrollments : new ArrayList<>();
+        this.lectureTeachers = lectureTeachers != null ? lectureTeachers : new ArrayList<>();
+        this.practiceTeachers = practiceTeachers != null ? practiceTeachers : new ArrayList<>();
+    }
 
     public String getCourseCode() {
         return courseCode;
