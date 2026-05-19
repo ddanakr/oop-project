@@ -1,6 +1,6 @@
 bin/
 out/
 *.class
-.settings/d
+.settings/
 .classpath
 .project
