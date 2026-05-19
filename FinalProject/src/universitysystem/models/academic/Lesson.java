@@ -59,7 +59,7 @@ public class Lesson {
         this.lessonType = lessonType;
     }
 
-    public LocalDateTime getDateTime() {
+    public DateTime getDateTime() {
         return dateTime;
     }
 

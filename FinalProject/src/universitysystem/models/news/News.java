@@ -3,71 +3,35 @@ package universitysystem.models.news;
 import universitysystem.models.DateTime;
 import universitysystem.models.users.User;
 
-import java.io.*;
-import java.util.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
-/**
- * 
- */
 public class News implements Serializable {
+    private int id;
+    private String title;
+    private String topic;
+    private String body;
+    private User author;
+    private DateTime createdAt;
+    private boolean pinned;
+    private List<Comment> comments;
 
-    /**
-     * Default constructor
-     */
     public News() {
         this.comments = new ArrayList<>();
     }
 
-    public News(int id, String title, String topic, String body, User author, DateTime createdAt, boolean isPinned, List<Comment> comments) {
+    public News(int id, String title, String topic, String body, User author, DateTime createdAt, boolean pinned, List<Comment> comments) {
         this.id = id;
         this.title = title;
         this.topic = topic;
         this.body = body;
         this.author = author;
         this.createdAt = createdAt;
-        this.isPinned = isPinned;
+        this.pinned = pinned;
         this.comments = comments != null ? comments : new ArrayList<>();
     }
-
-    /**
-     * 
-     */
-    private int id;
-
-    /**
-     * 
-     */
-    private String title;
-
-    /**
-     * 
-     */
-    private String topic;
-
-    /**
-     * 
-     */
-    private String body;
-
-    /**
-     * 
-     */
-    private User author;
-
-    /**
-     * 
-     */
-    private DateTime createdAt;
-
-    /**
-     * 
-     */
-    private boolean isPinned = false;
-
-    /**
-     * 
-     */
-    private List<Comment> comments;
 
     public int getId() {
         return id;
@@ -118,11 +82,11 @@ public class News implements Serializable {
     }
 
     public boolean isPinned() {
-        return isPinned;
+        return pinned;
     }
 
     public void setPinned(boolean pinned) {
-        isPinned = pinned;
+        this.pinned = pinned;
     }
 
     public List<Comment> getComments() {
@@ -133,15 +97,9 @@ public class News implements Serializable {
         this.comments = comments != null ? comments : new ArrayList<>();
     }
 
-    /**
-     * 
-     */
     public void addComment(Comment comment) {
-        if (this.comments == null) {
-            this.comments = new ArrayList<>();
-        }
         if (comment != null) {
-            this.comments.add(comment);
+            comments.add(comment);
         }
     }
 
@@ -151,6 +109,7 @@ public class News implements Serializable {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", topic='" + topic + '\'' +
+                ", pinned=" + pinned +
                 '}';
     }
 
@@ -166,5 +125,4 @@ public class News implements Serializable {
     public int hashCode() {
         return Objects.hash(id);
     }
-
 }

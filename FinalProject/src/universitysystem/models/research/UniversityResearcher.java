@@ -1,23 +1,14 @@
 package universitysystem.models.research;
 
-import java.io.*;
-import java.util.*;
+import universitysystem.models.users.User;
 
-/**
- * 
- */
+import java.util.List;
+
 public class UniversityResearcher extends ResearchDecorator {
-
-	/**
-     * Default constructor
-     */
     public UniversityResearcher() {
         super();
     }
 
-    /**
-     * 
-     */
     public UniversityResearcher(User user) {
         super();
         setUser(user);
@@ -27,4 +18,7 @@ public class UniversityResearcher extends ResearchDecorator {
         super(user, papers, projects);
     }
 
+    public UniversityResearcher(Researcher researcher) {
+        super(researcher);
+    }
 }

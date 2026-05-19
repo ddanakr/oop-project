@@ -1,5 +1,7 @@
 package universitysystem.models.users;
 
+import universitysystem.database.Database;
+
 import java.io.*;
 import java.util.*;
 

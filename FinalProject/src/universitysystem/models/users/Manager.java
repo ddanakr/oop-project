@@ -1,30 +1,25 @@
 package universitysystem.models.users;
 
+import universitysystem.database.Database;
 import universitysystem.models.academic.Course;
 import universitysystem.models.news.News;
 import universitysystem.models.requests.Request;
 import universitysystem.models.requests.RequestStatus;
 import universitysystem.models.research.ResearchPaper;
-import universitysystem.models.research.ResearchProject;
+import universitysystem.models.research.Researcher;
 
-import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
-/**
- * 
- */
 public class Manager extends Employee implements ReportManager, CourseManager, RequestManager {
+    private ManagerType type;
 
-    /**
-     * Default constructor
-     */
     public Manager() {
     }
-
-    /**
-     * 
-     */
-    private ManagerType type;
 
     public ManagerType getType() {
         return type;
@@ -34,55 +29,36 @@ public class Manager extends Employee implements ReportManager, CourseManager, R
         this.type = type;
     }
 
-    /**
-     * 
-     */
     public void createPerformanceReport() {
-        Database db = Database.getInstance();
-        if (db == null || db.getUsers() == null) {
-            System.out.println("No data to generate report.");
-            return;
-        }
+        List<Student> students = getStudentsInfo();
         double totalGpa = 0;
-        int count = 0;
-        for (User user : db.getUsers()) {
-            if (user instanceof Student) {
-                Student student = (Student) user;
-                totalGpa += student.getGpa();
-                count++;
-            }
+        for (Student student : students) {
+            totalGpa += student.getGpa();
         }
-        double average = count == 0 ? 0 : totalGpa / count;
+
+        double average = students.isEmpty() ? 0 : totalGpa / students.size();
         System.out.println("Average GPA of all students: " + average);
     }
 
-    /**
-     * 
-     */
     public void manageNews(News news) {
-        Database db = Database.getInstance();
-        if (db != null) {
-            if (db.getNews() == null) {
-                db.setNews(new ArrayList<>());
-            }
-            db.getNews().add(news);
+        if (news != null) {
+            Database.getInstance().getNews().add(news);
         }
     }
 
-    /**
-     * 
-     */
     public List<News> generateTopResearcherNews() {
         Database db = Database.getInstance();
-        if (db == null || db.getResearchPapers() == null) {
-            return Collections.emptyList();
-        }
         Map<String, Integer> citationTotals = new HashMap<>();
+
         for (ResearchPaper paper : db.getResearchPapers()) {
+            if (paper.getAuthors() == null) {
+                continue;
+            }
             for (Researcher author : paper.getAuthors()) {
                 citationTotals.merge(author.toString(), paper.getCitations(), Integer::sum);
             }
         }
+
         String topResearcher = null;
         int maxCitations = 0;
         for (Map.Entry<String, Integer> entry : citationTotals.entrySet()) {
@@ -91,22 +67,20 @@ public class Manager extends Employee implements ReportManager, CourseManager, R
                 topResearcher = entry.getKey();
             }
         }
+
         if (topResearcher == null) {
             return Collections.emptyList();
         }
+
         News news = new News();
         news.setTitle("Top Researcher: " + topResearcher);
+        news.setTopic("Research");
         news.setBody("Top researcher has " + maxCitations + " citations.");
-        if (db.getNews() == null) {
-            db.setNews(new ArrayList<>());
-        }
+        news.setPinned(true);
         db.getNews().add(news);
         return Collections.singletonList(news);
     }
 
-    /**
-     * 
-     */
     public void assignCourseToTeacher(Course course, Teacher teacher) {
         if (course == null || teacher == null) {
             return;
@@ -114,19 +88,14 @@ public class Manager extends Employee implements ReportManager, CourseManager, R
         if (teacher.getCourses() == null) {
             teacher.setCourses(new ArrayList<>());
         }
-        teacher.getCourses().add(course);
+        if (!teacher.getCourses().contains(course)) {
+            teacher.getCourses().add(course);
+        }
     }
 
-    /**
-     * 
-     */
     public List<Student> getStudentsInfo() {
-        Database db = Database.getInstance();
-        if (db == null || db.getUsers() == null) {
-            return Collections.emptyList();
-        }
         List<Student> students = new ArrayList<>();
-        for (User user : db.getUsers()) {
+        for (User user : Database.getInstance().getUsers()) {
             if (user instanceof Student) {
                 students.add((Student) user);
             }
@@ -134,16 +103,9 @@ public class Manager extends Employee implements ReportManager, CourseManager, R
         return students;
     }
 
-    /**
-     * 
-     */
     public List<Teacher> getTeacherInfo() {
-        Database db = Database.getInstance();
-        if (db == null || db.getUsers() == null) {
-            return Collections.emptyList();
-        }
         List<Teacher> teachers = new ArrayList<>();
-        for (User user : db.getUsers()) {
+        for (User user : Database.getInstance().getUsers()) {
             if (user instanceof Teacher) {
                 teachers.add((Teacher) user);
             }
@@ -151,63 +113,46 @@ public class Manager extends Employee implements ReportManager, CourseManager, R
         return teachers;
     }
 
-    /**
-     * 
-     */
     public void openCourseRegistration(Course course) {
         if (course != null) {
             course.setRegistrationOpen(true);
         }
     }
 
-    /**
-     * 
-     */
     public void closeCourseRegistration(Course course) {
         if (course != null) {
             course.setRegistrationOpen(false);
         }
     }
 
-    /**
-     * 
-     */
     public void approveRequest(Request request) {
         if (request != null) {
             request.setStatus(RequestStatus.ACCEPTED);
         }
     }
 
-    /**
-     * 
-     */
     public List<Request> viewRequests() {
-        Database db = Database.getInstance();
-        return db != null && db.getRequests() != null ? db.getRequests() : Collections.emptyList();
+        return Database.getInstance().getRequests();
     }
 
-    /**
-     * 
-     */
     public void rejectRequest(Request request) {
         if (request != null) {
             request.setStatus(RequestStatus.REJECTED);
         }
     }
 
-    /**
-     * 
-     */
     public enum ManagerType {
         OR,
         DEPARTMENT,
-        DEAN
+        DEAN,
+        RECTOR
     }
 
     @Override
     public String toString() {
         return "Manager{" +
                 "type=" + type +
+                ", login='" + getLogin() + '\'' +
                 '}';
     }
 
@@ -223,5 +168,4 @@ public class Manager extends Employee implements ReportManager, CourseManager, R
     public int hashCode() {
         return Objects.hash(getLogin());
     }
-
 }

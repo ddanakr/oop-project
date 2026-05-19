@@ -2,36 +2,39 @@ package universitysystem.models.research;
 
 import universitysystem.models.users.User;
 
-import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
-/**
- * 
- */
 public abstract class ResearchDecorator implements Researcher {
+    private Researcher wrappedResearcher;
+    private User user;
+    private List<ResearchPaper> papers;
+    private List<ResearchProject> projects;
 
-    /**
-     * Default constructor
-     */
     public ResearchDecorator() {
         this.papers = new ArrayList<>();
         this.projects = new ArrayList<>();
     }
 
-    /**
-     * 
-     */
-    private User user;
+    public ResearchDecorator(User user, List<ResearchPaper> papers, List<ResearchProject> projects) {
+        this.user = user;
+        this.papers = papers != null ? papers : new ArrayList<>();
+        this.projects = projects != null ? projects : new ArrayList<>();
+    }
 
-    /**
-     * 
-     */
-    private List<ResearchPaper> papers;
+    public ResearchDecorator(Researcher wrappedResearcher) {
+        this();
+        this.wrappedResearcher = wrappedResearcher;
+    }
 
-    /**
-     * 
-     */
-    private List<ResearchProject> projects;
+    public Researcher getWrappedResearcher() {
+        return wrappedResearcher;
+    }
+
+    public void setWrappedResearcher(Researcher wrappedResearcher) {
+        this.wrappedResearcher = wrappedResearcher;
+    }
 
     public User getUser() {
         return user;
@@ -57,15 +60,12 @@ public abstract class ResearchDecorator implements Researcher {
         this.projects = projects != null ? projects : new ArrayList<>();
     }
 
-
-
-
-
-
-    /**
-     * 
-     */
     public void publishPaper(ResearchPaper paper) {
+        if (wrappedResearcher != null) {
+            wrappedResearcher.publishPaper(paper);
+            return;
+        }
+
         if (this.papers == null) {
             this.papers = new ArrayList<>();
         }
@@ -74,10 +74,11 @@ public abstract class ResearchDecorator implements Researcher {
         }
     }
 
-    /**
-     * 
-     */
     public int getHIndex() {
+        if (wrappedResearcher != null) {
+            return wrappedResearcher.getHIndex();
+        }
+
         if (this.papers == null) {
             return 0;
         }
@@ -94,10 +95,12 @@ public abstract class ResearchDecorator implements Researcher {
         return h;
     }
 
-    /**
-     * 
-     */
     public void printPapers(Comparator<ResearchPaper> comp) {
+        if (wrappedResearcher != null) {
+            wrappedResearcher.printPapers(comp);
+            return;
+        }
+
         if (this.papers == null) {
             return;
         }
@@ -110,13 +113,14 @@ public abstract class ResearchDecorator implements Researcher {
         }
     }
 
-    /**
-     * 
-     */
     public void joinProject(ResearchProject project) {
+        if (wrappedResearcher != null) {
+            wrappedResearcher.joinProject(project);
+            return;
+        }
+
         if (project != null) {
             project.addParticipant(this);
         }
     }
-
 }

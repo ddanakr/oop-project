@@ -1,11 +1,14 @@
-package universitysystem.models.users;
+package universitysystem.database;
 
 import universitysystem.models.academic.Course;
 import universitysystem.models.academic.Enrollment;
+import universitysystem.models.news.Journal;
 import universitysystem.models.news.News;
 import universitysystem.models.requests.Request;
 import universitysystem.models.research.ResearchPaper;
 import universitysystem.models.research.ResearchProject;
+import universitysystem.models.users.LogFile;
+import universitysystem.models.users.User;
 
 import java.io.*;
 import java.util.*;
@@ -26,6 +29,7 @@ public class Database {
         this.news = new ArrayList<>();
         this.researchPapers = new ArrayList<>();
         this.researchProjects = new ArrayList<>();
+        this.journals = new ArrayList<>();
         this.logFiles = new ArrayList<>();
     }
 
@@ -68,6 +72,11 @@ public class Database {
      * 
      */
     private List<ResearchProject> researchProjects;
+
+    /**
+     * 
+     */
+    private List<Journal> journals;
 
     /**
      * 
@@ -135,6 +144,14 @@ public class Database {
 
     public void setResearchProjects(List<ResearchProject> researchProjects) {
         this.researchProjects = researchProjects != null ? researchProjects : new ArrayList<>();
+    }
+
+    public List<Journal> getJournals() {
+        return journals;
+    }
+
+    public void setJournals(List<Journal> journals) {
+        this.journals = journals != null ? journals : new ArrayList<>();
     }
 
     public List<LogFile> getLogFiles() {

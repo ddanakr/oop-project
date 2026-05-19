@@ -1,4 +1,9 @@
 package universitysystem.models.users;
+<<<<<<< Updated upstream
+=======
+
+import universitysystem.database.Database;
+>>>>>>> Stashed changes
 
 import java.io.*;
 import java.util.*;
@@ -230,7 +235,7 @@ public class Student extends User {
         if (this == o) return true;
         if (!(o instanceof Student)) return false;
         Student student = (Student) o;
-        return id == student.id;
+        return getId() == student.getId();
     }
 
     @Override

@@ -3,36 +3,16 @@ package universitysystem.models.news;
 import universitysystem.models.DateTime;
 import universitysystem.models.users.User;
 
-import java.io.*;
-import java.util.*;
+import java.util.Objects;
 
-/**
- * 
- */
 public class Comment {
+    private User user;
+    private String text;
+    private DateTime sentAt;
 
-    /**
-     * Default constructor
-     */
     public Comment() {
     }
 
-    /**
-     * 
-     */
-    private User user;
-
-    /**
-     * 
-     */
-    private String text;
-
-    /**
-     * 
-     */
-    private DateTime sentAt ;
-    
-    
     public Comment(User user, String text, DateTime sentAt) {
         this.user = user;
         this.text = text;
@@ -55,7 +35,7 @@ public class Comment {
         this.text = text;
     }
 
-    public LocalDateTime getSentAt() {
+    public DateTime getSentAt() {
         return sentAt;
     }
 
@@ -65,17 +45,19 @@ public class Comment {
 
     @Override
     public String toString() {
-        return "Comment{user=" + (user == null ? null : user.getLogin()) + ", sentAt=" + sentAt + ", text='" + text
-                + "'}";
+        return "Comment{" +
+                "user=" + (user == null ? null : user.getLogin()) +
+                ", sentAt=" + sentAt +
+                ", text='" + text + '\'' +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Comment)) return false;
         Comment comment = (Comment) o;
-        return Objects.equals(user == null ? null : user.getLogin(),
-                comment.user == null ? null : comment.user.getLogin())
+        return Objects.equals(user == null ? null : user.getLogin(), comment.user == null ? null : comment.user.getLogin())
                 && Objects.equals(sentAt, comment.sentAt);
     }
 
@@ -83,7 +65,4 @@ public class Comment {
     public int hashCode() {
         return Objects.hash(user == null ? null : user.getLogin(), sentAt);
     }
-
-
-
 }

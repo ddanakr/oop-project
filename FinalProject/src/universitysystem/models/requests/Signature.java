@@ -34,7 +34,7 @@ public class Signature {
     
     
 
-    public Signature(User signer, SignerRole signerRole, LocalDateTime signedAt) {
+    public Signature(User signer, SignerRole signerRole, DateTime signedAt) {
         this.signer = signer;
         this.signerRole = signerRole;
         this.signedAt = signedAt;
@@ -56,11 +56,11 @@ public class Signature {
         this.signerRole = signerRole;
     }
 
-    public LocalDateTime getSignedAt() {
+    public DateTime getSignedAt() {
         return signedAt;
     }
 
-    public void setSignedAt(LocalDateTime signedAt) {
+    public void setSignedAt(DateTime signedAt) {
         this.signedAt = signedAt;
     }
 
