@@ -1,16 +1,19 @@
 package universitysystem.models.research;
 
-import java.io.*;
-import java.util.*;
+import universitysystem.exceptions.NotAResearcherException;
 
-/**
- * 
- */
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 public class ResearchProject implements Serializable {
+    private int id;
+    private String name;
+    private String topic;
+    private List<Researcher> participants;
+    private List<ResearchPaper> papers;
 
-    /**
-     * Default constructor
-     */
     public ResearchProject() {
         this.participants = new ArrayList<>();
         this.papers = new ArrayList<>();
@@ -23,25 +26,13 @@ public class ResearchProject implements Serializable {
         this.papers = papers != null ? papers : new ArrayList<>();
     }
 
-    /**
-     * 
-     */
-    private String name;
+    public int getId() {
+        return id;
+    }
 
-    /**
-     * 
-     */
-    private String topic;
-
-    /**
-     * 
-     */
-    private List<Researcher> participants;
-
-    /**
-     * 
-     */
-    private List<ResearchPaper> papers;
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -75,42 +66,44 @@ public class ResearchProject implements Serializable {
         this.papers = papers != null ? papers : new ArrayList<>();
     }
 
-
-
-
-
-    /**
-     * 
-     */
     public void addParticipant(Researcher participant) {
         if (participant == null) {
-            throw new universitysystem.exceptions.NotAResearcherException("Participant must be a researcher.");
+            throw new NotAResearcherException("Participant must be a researcher.");
         }
-        if (this.participants == null) {
-            this.participants = new ArrayList<>();
+        if (!participants.contains(participant)) {
+            participants.add(participant);
         }
-        this.participants.add(participant);
     }
 
-    /**
-     * 
-     */
     public void removeParticipant(Researcher participant) {
-        if (this.participants != null) {
-            this.participants.remove(participant);
-        }
+        participants.remove(participant);
     }
 
-    /**
-     * 
-     */
     public void addPaper(ResearchPaper paper) {
-        if (this.papers == null) {
-            this.papers = new ArrayList<>();
-        }
-        if (paper != null) {
-            this.papers.add(paper);
+        if (paper != null && !papers.contains(paper)) {
+            papers.add(paper);
         }
     }
 
+    @Override
+    public String toString() {
+        return "ResearchProject{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", topic='" + topic + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ResearchProject)) return false;
+        ResearchProject that = (ResearchProject) o;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

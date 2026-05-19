@@ -5,9 +5,6 @@ import universitysystem.models.users.User;
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * Minimal log file model used by Database and Admin log views.
- */
 public class LogFile implements Serializable {
     private int id;
     private User user;

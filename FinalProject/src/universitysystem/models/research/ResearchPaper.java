@@ -1,18 +1,24 @@
 package universitysystem.models.research;
 
 import universitysystem.enums.CitationFormat;
+import universitysystem.models.research.citations.CitationStrategyFactory;
 
-import java.io.*;
-import java.util.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
-/**
- * 
- */
 public class ResearchPaper implements Serializable {
+    private int id;
+    private String title;
+    private List<Researcher> authors;
+    private int citations;
+    private int pages;
+    private String journal;
+    private Date date;
+    private List<ResearchPaper> references;
 
-    /**
-     * Default constructor
-     */
     public ResearchPaper() {
         this.authors = new ArrayList<>();
         this.references = new ArrayList<>();
@@ -28,40 +34,13 @@ public class ResearchPaper implements Serializable {
         this.references = references != null ? references : new ArrayList<>();
     }
 
-    /**
-     * 
-     */
-    private String title;
+    public int getId() {
+        return id;
+    }
 
-    /**
-     * 
-     */
-    private List<Researcher> authors;
-
-    /**
-     * 
-     */
-    private int citations;
-
-    /**
-     * 
-     */
-    private int pages;
-
-    /**
-     * 
-     */
-    private String journal;
-
-    /**
-     * 
-     */
-    private Date date;
-
-    /**
-     * 
-     */
-    private List<ResearchPaper> references;
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
@@ -119,61 +98,42 @@ public class ResearchPaper implements Serializable {
         this.references = references != null ? references : new ArrayList<>();
     }
 
-    private List<String> getAuthorNames() {
-        List<String> names = new ArrayList<>();
-        if (this.authors != null) {
-            for (Researcher author : this.authors) {
-                names.add(author.toString());
-            }
-        }
-        return names;
-    }
-
-
-
-
-
-
-
-    /**
-     * 
-     */
     public String getCitation(CitationFormat format) {
-        if (format == CitationFormat.BIBTEX) {
-            return "@article{" + this.title.replaceAll("\\s+", "") + ",\n" +
-                    "  title={" + title + "},\n" +
-                    "  author={" + String.join(", ", getAuthorNames()) + "},\n" +
-                    "  journal={" + journal + "},\n" +
-                    "  year={" + (date != null ? String.valueOf(date.getYear() + 1900) : "") + "},\n" +
-                    "  pages={" + pages + "}" +
-                    "\n}";
-        }
-        return String.join(", ", getAuthorNames()) + ". " + title + ". " + journal + ". " +
-                (date != null ? date.toString() : "") + ". Pages p. DOI: " + title;
+        return CitationStrategyFactory.getStrategy(format).format(this);
     }
 
-    /**
-     * 
-     */
     public void addAuthor(Researcher author) {
-        if (this.authors == null) {
-            this.authors = new ArrayList<>();
-        }
-        if (author != null) {
-            this.authors.add(author);
+        if (author != null && !authors.contains(author)) {
+            authors.add(author);
         }
     }
 
-    /**
-     * 
-     */
     public void addReference(ResearchPaper paper) {
-        if (this.references == null) {
-            this.references = new ArrayList<>();
-        }
-        if (paper != null) {
-            this.references.add(paper);
+        if (paper != null && !references.contains(paper)) {
+            references.add(paper);
         }
     }
 
+    @Override
+    public String toString() {
+        return "ResearchPaper{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", journal='" + journal + '\'' +
+                ", citations=" + citations +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ResearchPaper)) return false;
+        ResearchPaper that = (ResearchPaper) o;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

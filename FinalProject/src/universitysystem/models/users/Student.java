@@ -231,7 +231,7 @@ public class Student extends User {
         if (this == o) return true;
         if (!(o instanceof Student)) return false;
         Student student = (Student) o;
-        return id == student.id;
+        return getId() == student.getId();
     }
 
     @Override

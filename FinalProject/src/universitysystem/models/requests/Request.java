@@ -161,9 +161,21 @@ public class Request implements Serializable {
         if (this.signatures == null) {
             this.signatures = new ArrayList<>();
         }
-        if (signature != null) {
+        if (signature != null && !hasSignature(signature.getSignerRole())) {
             this.signatures.add(signature);
         }
+    }
+
+    public boolean hasSignature(Signature.SignerRole signerRole) {
+        if (signerRole == null || this.signatures == null) {
+            return false;
+        }
+        for (Signature signature : this.signatures) {
+            if (signature.getSignerRole() == signerRole) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

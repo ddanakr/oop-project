@@ -204,7 +204,7 @@ public abstract class User implements Subscriber, Serializable {
 
     @Override
     public void update(String notification) {
-        // later
+        System.out.println(notification);
     }
     
     
