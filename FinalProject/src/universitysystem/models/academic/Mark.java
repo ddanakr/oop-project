@@ -70,7 +70,7 @@ public class Mark implements Comparable<Mark>, Serializable {
      * 
      */
     public double calculateFinal() {
-        return att1 * 0.3 + att2 * 0.3 + finalExam * 0.4;
+        return att1 + att2 + finalExam;
     }
 
     @Override
