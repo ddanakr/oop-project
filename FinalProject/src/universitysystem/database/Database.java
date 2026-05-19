@@ -8,6 +8,7 @@ import universitysystem.models.core.Message;
 import universitysystem.models.requests.Request;
 import universitysystem.models.research.ResearchPaper;
 import universitysystem.models.research.ResearchProject;
+import universitysystem.models.research.Researcher;
 import universitysystem.models.core.LogFile;
 import universitysystem.models.users.User;
 
@@ -32,6 +33,7 @@ public class Database implements Serializable {
         this.news = new ArrayList<>();
         this.researchPapers = new ArrayList<>();
         this.researchProjects = new ArrayList<>();
+        this.researchers = new ArrayList<>();
         this.journals = new ArrayList<>();
         this.logFiles = new ArrayList<>();
         this.messages = new ArrayList<>();
@@ -76,6 +78,11 @@ public class Database implements Serializable {
      * 
      */
     private List<ResearchProject> researchProjects;
+
+    /**
+     *
+     */
+    private List<Researcher> researchers;
 
     /**
      * 
@@ -174,6 +181,7 @@ public class Database implements Serializable {
         setNews(news);
         setResearchPapers(researchPapers);
         setResearchProjects(researchProjects);
+        setResearchers(researchers);
         setJournals(journals);
         setLogFiles(logFiles);
         setMessages(messages);
@@ -233,6 +241,14 @@ public class Database implements Serializable {
 
     public void setResearchProjects(List<ResearchProject> researchProjects) {
         this.researchProjects = researchProjects != null ? researchProjects : new ArrayList<>();
+    }
+
+    public List<Researcher> getResearchers() {
+        return researchers;
+    }
+
+    public void setResearchers(List<Researcher> researchers) {
+        this.researchers = researchers != null ? researchers : new ArrayList<>();
     }
 
     public List<Journal> getJournals() {

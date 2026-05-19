@@ -131,21 +131,19 @@ public class StudentService {
     }
 
     /**
-     * Returns courses for which registration is open and the student can still fit the credit limit.
+     * Returns courses opened by managers for registration.
+     * Capacity, credit limit, and retake rules are still enforced when registration is attempted.
      */
     public List<Course> getAvailableCourses(Student student) {
         if (student == null || database.getCourses() == null) {
             return Collections.emptyList();
         }
         List<Course> courses = new ArrayList<Course>();
-        int currentCredits = enrollmentService.calculateCurrentCredits(student);
         for (Course course : database.getCourses()) {
             if (course != null
                     && course.isRegistrationOpen()
-                    && !course.isFull()
                     && !enrollmentService.hasOpenEnrollment(student, course)
-                    && !enrollmentService.hasPassedCourse(student, course)
-                    && currentCredits + course.getCredits() <= EnrollmentService.MAX_CREDITS) {
+                    && !enrollmentService.hasPassedCourse(student, course)) {
                 courses.add(course);
             }
         }

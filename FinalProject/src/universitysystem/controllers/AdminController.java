@@ -1,8 +1,10 @@
 package universitysystem.controllers;
 
 import universitysystem.models.core.LogFile;
+import universitysystem.models.research.Researcher;
 import universitysystem.models.users.User;
 import universitysystem.services.AdminService;
+import universitysystem.services.ResearchService;
 import universitysystem.views.AdminView;
 
 import java.util.Collections;
@@ -15,6 +17,7 @@ public class AdminController {
     private final MessageController messageController;
     private final NewsController newsController;
     private final JournalController journalController;
+    private final ResearchService researchService;
     private final User actor;
 
     public AdminController(AdminService adminService, User actor) {
@@ -34,6 +37,7 @@ public class AdminController {
         this.messageController = messageController;
         this.newsController = new NewsController(actor);
         this.journalController = new JournalController(actor);
+        this.researchService = new ResearchService();
         this.actor = actor;
     }
 
@@ -77,6 +81,12 @@ public class AdminController {
                 return true;
             case 10:
                 journalController.run();
+                return true;
+            case 11:
+                makeUserResearcher();
+                return true;
+            case 12:
+                openResearch();
                 return true;
             case 0:
                 adminView.showMessage("Logout.");
@@ -135,6 +145,20 @@ public class AdminController {
         messageController.run(actor, getAllUsers());
     }
 
+    private void makeUserResearcher() {
+        int userId = adminView.readUserId("Enter user id to make researcher: ");
+        adminView.showMessage(makeUserResearcher(userId) ? "Researcher profile created." : "User not found or already researcher.");
+    }
+
+    private void openResearch() {
+        Researcher researcher = researchService.getResearcherForUser(actor);
+        if (researcher == null) {
+            adminView.showError("Current admin is not a researcher.");
+            return;
+        }
+        new ResearchController(researcher).run();
+    }
+
     public List<User> getAllUsers() {
         return adminService == null ? Collections.emptyList() : adminService.getAllUsers();
     }
@@ -157,6 +181,10 @@ public class AdminController {
 
     public boolean resetPassword(int userId) {
         return adminService != null && adminService.resetUserPassword(userId, actor);
+    }
+
+    public boolean makeUserResearcher(int userId) {
+        return adminService != null && adminService.makeUserResearcher(userId, actor);
     }
 
     public List<LogFile> getLogs() {

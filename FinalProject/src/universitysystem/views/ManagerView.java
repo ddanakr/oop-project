@@ -20,6 +20,7 @@ public class ManagerView {
         System.out.println("5. Academic performance report");
         System.out.println("6. Requests");
         System.out.println("7. Course management");
+        System.out.println("8. Research");
         System.out.println("0. Back");
     }
 
@@ -57,6 +58,19 @@ public class ManagerView {
 
     public String readCourseCode() {
         return ConsoleUtils.readLine("Course code: ");
+    }
+
+    public int readCourseSelection(int courseCount) {
+        if (courseCount <= 0) {
+            return -1;
+        }
+        System.out.println("Enter 0 to cancel.");
+        int selected = ConsoleUtils.readInt("Select course number: ");
+        if (selected < 0 || selected > courseCount) {
+            showError("Invalid course number.");
+            return -1;
+        }
+        return selected == 0 ? -1 : selected - 1;
     }
 
     public int readTeacherId() {
@@ -103,8 +117,10 @@ public class ManagerView {
 
     public void showCourses(List<Course> courses) {
         List<List<String>> rows = new ArrayList<>();
-        for (Course course : courses) {
+        for (int i = 0; i < courses.size(); i++) {
+            Course course = courses.get(i);
             rows.add(Arrays.asList(
+                    String.valueOf(i + 1),
                     valueOrDash(course.getCourseCode()),
                     valueOrDash(course.getTitle()),
                     course.getType() == null ? "-" : course.getType().name(),
@@ -115,7 +131,7 @@ public class ManagerView {
         }
 
         ConsoleUtils.printTable(
-                Arrays.asList("Code", "Title", "Type", "Credits", "Registration", "Capacity"),
+                Arrays.asList("No.", "Code", "Title", "Type", "Credits", "Registration", "Capacity"),
                 rows
         );
     }

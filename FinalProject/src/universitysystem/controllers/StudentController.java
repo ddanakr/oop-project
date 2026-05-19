@@ -13,6 +13,7 @@ import universitysystem.models.users.Teacher;
 import universitysystem.models.users.User;
 import universitysystem.services.EnrollmentService;
 import universitysystem.services.InMemoryMessageService;
+import universitysystem.services.ResearchService;
 import universitysystem.services.StudentService;
 import universitysystem.views.MessageView;
 import universitysystem.views.StudentView;
@@ -222,11 +223,16 @@ public class StudentController {
 
     private void openResearch() {
         if (researchController == null) {
-            studentView.showError("Current student is not a researcher.");
-            studentView.waitForEnter();
-            return;
+            Researcher researcher = new ResearchService().getResearcherForUser(student);
+            if (researcher == null) {
+                studentView.showError("Current student is not a researcher.");
+                studentView.waitForEnter();
+                return;
+            }
+            new ResearchController(researcher).run();
+        } else {
+            researchController.run();
         }
-        researchController.run();
     }
 
     /**

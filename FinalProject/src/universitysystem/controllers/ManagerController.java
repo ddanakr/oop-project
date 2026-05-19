@@ -2,7 +2,9 @@ package universitysystem.controllers;
 
 import universitysystem.models.users.Manager;
 import universitysystem.models.academic.Course;
+import universitysystem.models.research.Researcher;
 import universitysystem.models.users.Teacher;
+import universitysystem.services.ResearchService;
 import universitysystem.services.ManagerService;
 import universitysystem.utils.ConsoleUtils;
 import universitysystem.views.ManagerView;
@@ -12,6 +14,7 @@ public class ManagerController {
     private final ManagerView managerView;
     private final ManagerNewsController managerNewsController;
     private final ManagerJournalController managerJournalController;
+    private final ResearchService researchService;
     private Manager currentManager;
 
     public ManagerController(Manager currentManager) {
@@ -29,6 +32,7 @@ public class ManagerController {
         this.managerView = managerView;
         this.managerNewsController = managerNewsController;
         this.managerJournalController = managerJournalController;
+        this.researchService = new ResearchService();
         this.currentManager = currentManager;
     }
 
@@ -78,6 +82,9 @@ public class ManagerController {
                 return true;
             case 7:
                 handleCourseManagement();
+                return true;
+            case 8:
+                openResearch();
                 return true;
             case 0:
                 managerView.showMessage("Back to previous menu.");
@@ -247,5 +254,14 @@ public class ManagerController {
         } else {
             managerView.showError("Request was not found.");
         }
+    }
+
+    private void openResearch() {
+        Researcher researcher = researchService.getResearcherForUser(currentManager);
+        if (researcher == null) {
+            managerView.showError("Current manager is not a researcher.");
+            return;
+        }
+        new ResearchController(researcher).run();
     }
 }

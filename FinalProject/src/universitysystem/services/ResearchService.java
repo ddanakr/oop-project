@@ -1,24 +1,23 @@
 package universitysystem.services;
 
 import universitysystem.database.Database;
-import universitysystem.enums.CitationFormat;
-import universitysystem.enums.ResearchPaperSortType;
 import universitysystem.models.news.Journal;
+import universitysystem.enums.CitationFormat;
 import universitysystem.models.research.ResearchDecorator;
 import universitysystem.models.research.ResearchPaper;
+import universitysystem.enums.ResearchPaperSortType;
 import universitysystem.models.research.ResearchProject;
 import universitysystem.models.research.Researcher;
+import universitysystem.models.research.UniversityResearcher;
 import universitysystem.models.research.citations.CitationStrategy;
 import universitysystem.models.research.citations.CitationStrategyFactory;
 import universitysystem.models.users.GraduateStudent;
 import universitysystem.models.users.Teacher;
 import universitysystem.models.users.User;
-import universitysystem.utils.ResearchPaperComparators;
-import universitysystem.utils.ResearcherCitationStatComparators;
-import universitysystem.utils.ResearcherComparators;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -112,7 +111,7 @@ public class ResearchService {
 
     public List<ResearchPaper> getAllPapers(ResearchPaperSortType sortType) {
         List<ResearchPaper> papers = new ArrayList<>(database.getResearchPapers());
-        papers.sort(ResearchPaperComparators.bySortType(sortType));
+        papers.sort(getPaperComparator(sortType));
         return papers;
     }
 
@@ -127,12 +126,49 @@ public class ResearchService {
                 researchers.add((Researcher) user);
             }
         }
+        if (database.getResearchers() != null) {
+            for (Researcher researcher : database.getResearchers()) {
+                if (researcher != null && !researchers.contains(researcher)) {
+                    researchers.add(researcher);
+                }
+            }
+        }
         return researchers;
+    }
+
+    public Researcher getResearcherForUser(User user) {
+        if (user == null) {
+            return null;
+        }
+        if (user instanceof Researcher) {
+            return (Researcher) user;
+        }
+        if (database.getResearchers() == null) {
+            return null;
+        }
+        for (Researcher researcher : database.getResearchers()) {
+            if (researcher instanceof ResearchDecorator) {
+                User decoratedUser = ((ResearchDecorator) researcher).getUser();
+                if (user.equals(decoratedUser)) {
+                    return researcher;
+                }
+            }
+        }
+        return null;
+    }
+
+    public boolean makeResearcher(User user) {
+        if (user == null || getResearcherForUser(user) != null) {
+            return false;
+        }
+        database.getResearchers().add(new UniversityResearcher(user));
+        database.save();
+        return true;
     }
 
     public List<Researcher> getTopResearchers() {
         List<Researcher> researchers = getAllResearchers();
-        researchers.sort(ResearcherComparators.BY_H_INDEX);
+        researchers.sort((first, second) -> Integer.compare(second.getHIndex(), first.getHIndex()));
         return researchers;
     }
 
@@ -157,7 +193,7 @@ public class ResearchService {
         } else {
             papers = new ArrayList<>();
         }
-        papers.sort(ResearchPaperComparators.bySortType(sortType));
+        papers.sort(getPaperComparator(sortType));
         return papers;
     }
 
@@ -171,13 +207,13 @@ public class ResearchService {
 
     public List<ResearcherCitationStat> getTopCitedResearchers() {
         List<ResearcherCitationStat> stats = getResearcherCitationStats(0);
-        stats.sort(ResearcherCitationStatComparators.BY_CITATIONS);
+        stats.sort((first, second) -> Integer.compare(second.getCitations(), first.getCitations()));
         return stats;
     }
 
     public List<ResearcherCitationStat> getTopCitedResearchersByYear(int year) {
         List<ResearcherCitationStat> stats = getResearcherCitationStats(year);
-        stats.sort(ResearcherCitationStatComparators.BY_CITATIONS);
+        stats.sort((first, second) -> Integer.compare(second.getCitations(), first.getCitations()));
         return stats;
     }
 
@@ -282,6 +318,16 @@ public class ResearchService {
         return year <= 0 || paper.getDate() != null && paper.getDate().getYear() + 1900 == year;
     }
 
+    private Comparator<ResearchPaper> getPaperComparator(ResearchPaperSortType sortType) {
+        if (sortType == ResearchPaperSortType.CITATIONS) {
+            return Comparator.comparing(ResearchPaper::getCitations).reversed();
+        }
+        if (sortType == ResearchPaperSortType.PAGES) {
+            return Comparator.comparing(ResearchPaper::getPages).reversed();
+        }
+        return Comparator.comparing(ResearchPaper::getDate, Comparator.nullsLast(Comparator.reverseOrder()));
+    }
+
     private void createResearchPaperAnnouncement(ResearchPaper paper, Researcher author) {
         newsService.createNews(
                 "Research paper published: " + paper.getTitle(),
@@ -294,7 +340,8 @@ public class ResearchService {
     private void publishPaperInJournal(ResearchPaper paper) {
         Journal journal = findJournalByName(paper.getJournal());
         if (journal == null) {
-            return;
+            journal = new Journal(paper.getJournal());
+            database.getJournals().add(journal);
         }
         journal.publishPaper(paper);
     }

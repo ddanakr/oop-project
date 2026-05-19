@@ -2,10 +2,11 @@ package universitysystem.controllers;
 
 import universitysystem.database.Database;
 import universitysystem.enums.RequestStatus;
+import universitysystem.models.research.Researcher;
 import universitysystem.models.requests.Request;
 import universitysystem.models.users.User;
+import universitysystem.services.ResearchService;
 import universitysystem.services.TechSupportService;
-import universitysystem.views.AdminView;
 import universitysystem.views.TechSupportView;
 
 import java.util.Collections;
@@ -18,6 +19,7 @@ public class TechSupportController {
     private final MessageController messageController;
     private final NewsController newsController;
     private final JournalController journalController;
+    private final ResearchService researchService;
     private final User currentUser;
 
     public TechSupportController(TechSupportService techSupportService) {
@@ -37,6 +39,7 @@ public class TechSupportController {
         this.messageController = messageController;
         this.newsController = new NewsController(currentUser);
         this.journalController = new JournalController(currentUser);
+        this.researchService = new ResearchService();
         this.currentUser = currentUser;
     }
 
@@ -77,6 +80,9 @@ public class TechSupportController {
                 return true;
             case 9:
                 journalController.run();
+                return true;
+            case 10:
+                openResearch();
                 return true;
             case 0:
                 techSupportView.showMessage("Logout.");
@@ -132,6 +138,15 @@ public class TechSupportController {
         Database db = Database.getInstance();
         List<User> users = db == null || db.getUsers() == null ? Collections.emptyList() : db.getUsers();
         messageController.run(currentUser, users);
+    }
+
+    private void openResearch() {
+        Researcher researcher = researchService.getResearcherForUser(currentUser);
+        if (researcher == null) {
+            techSupportView.showError("Current user is not a researcher.");
+            return;
+        }
+        new ResearchController(researcher).run();
     }
 
     public List<Request> getAllRequests() {

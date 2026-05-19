@@ -20,6 +20,7 @@ public class TechSupportView {
         System.out.println("7. Messages");
         System.out.println("8. News");
         System.out.println("9. Journals");
+        System.out.println("10. Research");
         System.out.println("0. Logout");
     }
 

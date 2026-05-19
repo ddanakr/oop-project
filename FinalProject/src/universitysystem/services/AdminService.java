@@ -18,5 +18,7 @@ public interface AdminService {
 
     boolean resetUserPassword(int userId, User actor);
 
+    boolean makeUserResearcher(int userId, User actor);
+
     List<LogFile> getLogs();
 }

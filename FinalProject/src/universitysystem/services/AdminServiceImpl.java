@@ -1,8 +1,11 @@
 package universitysystem.services;
 
 import universitysystem.database.Database;
+import universitysystem.enums.Degree;
 import universitysystem.models.core.DateTime;
 import universitysystem.models.core.LogFile;
+import universitysystem.models.users.GraduateStudent;
+import universitysystem.models.users.Student;
 import universitysystem.models.users.User;
 
 import java.util.ArrayList;
@@ -52,7 +55,7 @@ public class AdminServiceImpl implements AdminService {
         for (int i = 0; i < db.getUsers().size(); i++) {
             User existing = db.getUsers().get(i);
             if (existing != null && existing.getId() == user.getId()) {
-                db.getUsers().set(i, user);
+                db.getUsers().set(i, normalizeUser(user));
                 log(actor, "Updated user: " + safeLogin(user) + " (id=" + user.getId() + ")");
                 db.save();
                 return true;
@@ -87,6 +90,17 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public boolean makeUserResearcher(int userId, User actor) {
+        User user = findUserById(userId);
+        if (user == null) return false;
+        boolean created = new ResearchService().makeResearcher(user);
+        if (created) {
+            log(actor, "Made user researcher: " + safeLogin(user) + " (id=" + userId + ")");
+        }
+        return created;
+    }
+
+    @Override
     public List<LogFile> getLogs() {
         Database db = Database.getInstance();
         if (db == null || db.getLogFiles() == null) return Collections.emptyList();
@@ -110,5 +124,37 @@ public class AdminServiceImpl implements AdminService {
         if (user == null) return "(unknown)";
         String login = user.getLogin();
         return login == null || login.trim().isEmpty() ? "(no login)" : login;
+    }
+
+    private User normalizeUser(User user) {
+        if (user instanceof Student
+                && !(user instanceof GraduateStudent)
+                && isGraduateDegree(((Student) user).getDegree())) {
+            return toGraduateStudent((Student) user);
+        }
+        return user;
+    }
+
+    private boolean isGraduateDegree(Degree degree) {
+        return degree == Degree.MASTER || degree == Degree.PHD;
+    }
+
+    private GraduateStudent toGraduateStudent(Student student) {
+        GraduateStudent graduateStudent = new GraduateStudent();
+        graduateStudent.setId(student.getId());
+        graduateStudent.setName(student.getName());
+        graduateStudent.setLastName(student.getLastName());
+        graduateStudent.setLogin(student.getLogin());
+        graduateStudent.setPassword(student.getPassword());
+        graduateStudent.setAge(student.getAge());
+        graduateStudent.setEmail(student.getEmail());
+        graduateStudent.setPhoneNumber(student.getPhoneNumber());
+        graduateStudent.setGender(student.getGender());
+        graduateStudent.setYear(student.getYear());
+        graduateStudent.setDegree(student.getDegree());
+        graduateStudent.setSpeciality(student.getSpeciality());
+        graduateStudent.setGpa(student.getGpa());
+        graduateStudent.setCredits(student.getCredits());
+        return graduateStudent;
     }
 }

@@ -3,6 +3,7 @@ package universitysystem.views;
 import universitysystem.enums.Degree;
 import universitysystem.models.core.LogFile;
 import universitysystem.models.users.Admin;
+import universitysystem.models.users.GraduateStudent;
 import universitysystem.models.users.Manager;
 import universitysystem.models.users.Student;
 import universitysystem.models.users.Teacher;
@@ -27,6 +28,8 @@ public class AdminView {
         System.out.println("8. Messages");
         System.out.println("9. News");
         System.out.println("10. Journals");
+        System.out.println("11. Make user researcher");
+        System.out.println("12. Research");
         System.out.println("0. Logout");
     }
 
@@ -59,6 +62,9 @@ public class AdminView {
         readRequiredUserFields(user);
         if (user instanceof Student) {
             readStudentFields((Student) user);
+            if (!(user instanceof GraduateStudent) && isGraduateDegree(((Student) user).getDegree())) {
+                user = toGraduateStudent((Student) user);
+            }
         } else if (user instanceof Manager) {
             readManagerFields((Manager) user, false);
         }
@@ -112,6 +118,9 @@ public class AdminView {
             user.setGender(gender);
         }
 
+        if (user instanceof Student) {
+            readStudentUpdates((Student) user);
+        }
         if (user instanceof Manager) {
             readManagerFields((Manager) user, true);
         }
@@ -211,6 +220,60 @@ public class AdminView {
             student.setDegree(Degree.values()[degreeChoice - 1]);
         }
         student.setSpeciality(ConsoleUtils.getInput("Speciality: "));
+    }
+
+    private void readStudentUpdates(Student student) {
+        String yearInput = ConsoleUtils.getInput("Year (" + student.getYear() + "): ");
+        if (!yearInput.trim().isEmpty()) {
+            try {
+                student.setYear(Integer.parseInt(yearInput.trim()));
+            } catch (NumberFormatException ex) {
+                showError("Invalid year, keeping old value.");
+            }
+        }
+
+        ConsoleUtils.printHeader("Degree");
+        Degree[] degrees = Degree.values();
+        for (int i = 0; i < degrees.length; i++) {
+            System.out.println((i + 1) + ". " + degrees[i]);
+        }
+        System.out.println("0. Keep current (" + (student.getDegree() == null ? "none" : student.getDegree()) + ")");
+        int degreeChoice = ConsoleUtils.getIntInput("Degree: ");
+        if (degreeChoice >= 1 && degreeChoice <= degrees.length) {
+            student.setDegree(degrees[degreeChoice - 1]);
+        }
+
+        String speciality = ConsoleUtils.getInput("Speciality (" + safe(student.getSpeciality()) + "): ");
+        if (!speciality.trim().isEmpty()) {
+            student.setSpeciality(speciality);
+        }
+    }
+
+    private boolean isGraduateDegree(Degree degree) {
+        return degree == Degree.MASTER || degree == Degree.PHD;
+    }
+
+    private GraduateStudent toGraduateStudent(Student student) {
+        GraduateStudent graduateStudent = new GraduateStudent();
+        copyUserFields(student, graduateStudent);
+        graduateStudent.setYear(student.getYear());
+        graduateStudent.setDegree(student.getDegree());
+        graduateStudent.setSpeciality(student.getSpeciality());
+        graduateStudent.setGpa(student.getGpa());
+        graduateStudent.setCredits(student.getCredits());
+        return graduateStudent;
+    }
+
+    private void copyUserFields(User source, User target) {
+        target.setId(source.getId());
+        target.setName(source.getName());
+        target.setLastName(source.getLastName());
+        target.setLogin(source.getLogin());
+        target.setPassword(source.getPassword());
+        target.setAge(source.getAge());
+        target.setEmail(source.getEmail());
+        target.setPhoneNumber(source.getPhoneNumber());
+        target.setGender(source.getGender());
     }
 
     private void readManagerFields(Manager manager, boolean allowKeepCurrent) {
