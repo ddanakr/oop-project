@@ -1,6 +1,7 @@
 bin/
 out/
 *.class
+*.ser
 .settings/
 .classpath
 .project

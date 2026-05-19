@@ -303,8 +303,6 @@ public class EnrollmentService {
 
     private void saveDatabase() {
         invokeNoArgDatabaseMethod("save");
-        invokeNoArgDatabaseMethod("saveData");
-        invokeNoArgDatabaseMethod("serialize");
     }
 
     @SuppressWarnings("unchecked")

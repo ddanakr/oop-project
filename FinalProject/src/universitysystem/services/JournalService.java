@@ -24,6 +24,7 @@ public class JournalService {
 
         Journal journal = new Journal(name);
         database.getJournals().add(journal);
+        database.save();
         return journal;
     }
 
@@ -50,6 +51,7 @@ public class JournalService {
 
         Journal journal = createJournal(journalName);
         journal.subscribe(subscriber);
+        database.save();
         return true;
     }
 
@@ -60,6 +62,7 @@ public class JournalService {
         }
 
         journal.unsubscribe(subscriber);
+        database.save();
         return true;
     }
 

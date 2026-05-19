@@ -9,7 +9,8 @@ import java.util.*;
 /**
  * 
  */
-public class Signature {
+public class Signature implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     /**
      * Default constructor

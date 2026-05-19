@@ -6,7 +6,8 @@ import java.util.*;
 /**
  * 
  */
-public class Mark implements Comparable<Mark> {
+public class Mark implements Comparable<Mark>, Serializable {
+    private static final long serialVersionUID = 1L;
 
     /**
      * Default constructor

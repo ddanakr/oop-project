@@ -32,6 +32,7 @@ public class NewsService {
         news.setPinned(isResearchTopic(topic));
 
         database.getNews().add(news);
+        database.save();
         return news;
     }
 
@@ -87,11 +88,16 @@ public class NewsService {
         if (hasText(body)) {
             news.setBody(body);
         }
+        database.save();
         return true;
     }
 
     public boolean deleteNews(int id) {
-        return database.getNews().removeIf(news -> news.getId() == id);
+        boolean deleted = database.getNews().removeIf(news -> news.getId() == id);
+        if (deleted) {
+            database.save();
+        }
+        return deleted;
     }
 
     public boolean pinNews(int id) {
@@ -112,6 +118,7 @@ public class NewsService {
 
         Comment comment = new Comment(user, text, DateTime.now());
         news.addComment(comment);
+        database.save();
         return comment;
     }
 
@@ -130,6 +137,7 @@ public class NewsService {
         }
 
         news.setPinned(pinned);
+        database.save();
         return true;
     }
 

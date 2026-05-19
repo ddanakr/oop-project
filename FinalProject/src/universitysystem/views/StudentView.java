@@ -5,37 +5,25 @@ import universitysystem.models.academic.Course;
 import universitysystem.models.academic.Enrollment;
 import universitysystem.models.academic.Mark;
 import universitysystem.models.users.Student;
+import universitysystem.utils.ConsoleUtils;
 
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * Console view for student academic actions.
  * This class only reads input and prints output; business rules live in services/controllers.
  */
 public class StudentView {
-    private final Scanner scanner;
-
-    public StudentView() {
-        this(new Scanner(System.in));
-    }
-
-    public StudentView(Scanner scanner) {
-        this.scanner = scanner;
-    }
-
     /**
      * Shows the main student menu and returns the selected option.
      */
     public int showMenu(Student student) {
-        System.out.println();
-        System.out.println("========== Student Menu ==========");
+        ConsoleUtils.printHeader("Student Menu");
         System.out.println("Logged in as: " + formatStudentName(student));
         System.out.println("1. View available courses and register");
         System.out.println("2. View marks for enrolled courses");
         System.out.println("3. Print transcript with GPA");
         System.out.println("0. Back / Logout");
-        System.out.println("==================================");
         return readInt("Choose an option: ", 0, 3);
     }
 
@@ -80,8 +68,7 @@ public class StudentView {
      * Menu option 1 input: asks semester for the new enrollment.
      */
     public Semester askSemester() {
-        System.out.println();
-        System.out.println("Choose semester:");
+        ConsoleUtils.printHeader("Choose Semester");
         Semester[] semesters = Semester.values();
         for (int i = 0; i < semesters.length; i++) {
             System.out.println((i + 1) + ". " + semesters[i]);
@@ -127,10 +114,8 @@ public class StudentView {
      * Menu option 3 display: prints transcript text prepared by the service.
      */
     public void displayTranscript(String transcript) {
-        System.out.println();
-        System.out.println("========== Transcript ==========");
+        ConsoleUtils.printHeader("Transcript");
         System.out.println(transcript == null ? "Transcript is unavailable." : transcript);
-        System.out.println("================================");
     }
 
     /**
@@ -151,14 +136,12 @@ public class StudentView {
      * Pauses after an action so the user can read the result.
      */
     public void waitForEnter() {
-        System.out.print("Press Enter to continue...");
-        scanner.nextLine();
+        ConsoleUtils.pressEnterToContinue();
     }
 
     private int readInt(String prompt, int min, int max) {
         while (true) {
-            System.out.print(prompt);
-            String input = scanner.nextLine().trim();
+            String input = ConsoleUtils.getInput(prompt).trim();
             try {
                 int value = Integer.parseInt(input);
                 if (value >= min && value <= max) {

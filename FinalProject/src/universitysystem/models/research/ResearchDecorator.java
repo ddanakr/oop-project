@@ -2,11 +2,13 @@ package universitysystem.models.research;
 
 import universitysystem.models.users.User;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public abstract class ResearchDecorator implements Researcher {
+public abstract class ResearchDecorator implements Researcher, Serializable {
+    private static final long serialVersionUID = 1L;
     private Researcher wrappedResearcher;
     private User user;
     private List<ResearchPaper> papers;

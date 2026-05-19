@@ -61,18 +61,21 @@ public class ManagerService {
         }
         if (!teacher.getCourses().contains(course)) {
             teacher.getCourses().add(course);
+            database.save();
         }
     }
 
     public void openCourseRegistration(Course course) {
         if (course != null) {
             course.setRegistrationOpen(true);
+            database.save();
         }
     }
 
     public void closeCourseRegistration(Course course) {
         if (course != null) {
             course.setRegistrationOpen(false);
+            database.save();
         }
     }
 
@@ -121,6 +124,7 @@ public class ManagerService {
 
         Signature.SignerRole signerRole = getSignerRole(manager);
         request.addSignature(new Signature(manager, signerRole, DateTime.now()));
+        database.save();
         return true;
     }
 
@@ -136,6 +140,7 @@ public class ManagerService {
         }
 
         request.setStatus(RequestStatus.ACCEPTED);
+        database.save();
         return true;
     }
 
@@ -147,6 +152,7 @@ public class ManagerService {
             return false;
         }
         request.setStatus(RequestStatus.REJECTED);
+        database.save();
         return true;
     }
 

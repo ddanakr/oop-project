@@ -1,10 +1,12 @@
 package universitysystem.models.core;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-public class DateTime {
+public class DateTime implements Serializable {
+    private static final long serialVersionUID = 1L;
     private LocalDateTime dateTime;
 
     public DateTime() {

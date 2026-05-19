@@ -5,37 +5,25 @@ import universitysystem.models.academic.Enrollment;
 import universitysystem.models.academic.Mark;
 import universitysystem.models.users.Student;
 import universitysystem.models.users.Teacher;
+import universitysystem.utils.ConsoleUtils;
 
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * Console view for teacher academic actions.
  * This class handles menu text, input validation, and formatted output only.
  */
 public class TeacherView {
-    private final Scanner scanner;
-
-    public TeacherView() {
-        this(new Scanner(System.in));
-    }
-
-    public TeacherView(Scanner scanner) {
-        this.scanner = scanner;
-    }
-
     /**
      * Shows the main teacher menu and returns the selected option.
      */
     public int showMenu(Teacher teacher) {
-        System.out.println();
-        System.out.println("========== Teacher Menu ==========");
+        ConsoleUtils.printHeader("Teacher Menu");
         System.out.println("Logged in as: " + formatTeacherName(teacher));
         System.out.println("1. View assigned courses");
         System.out.println("2. View students in a course");
         System.out.println("3. Put or update marks for students");
         System.out.println("0. Back / Logout");
-        System.out.println("==================================");
         return readInt("Choose an option: ", 0, 3);
     }
 
@@ -142,6 +130,7 @@ public class TeacherView {
      * Menu option 3 input: asks whether to put a new mark or update an existing one.
      */
     public boolean askUpdateExistingMark() {
+        ConsoleUtils.printHeader("Mark Action");
         System.out.println("1. Put mark");
         System.out.println("2. Update mark");
         return readInt("Choose action: ", 1, 2) == 2;
@@ -175,14 +164,12 @@ public class TeacherView {
      * Pauses after an action so the user can read the result.
      */
     public void waitForEnter() {
-        System.out.print("Press Enter to continue...");
-        scanner.nextLine();
+        ConsoleUtils.pressEnterToContinue();
     }
 
     private int readInt(String prompt, int min, int max) {
         while (true) {
-            System.out.print(prompt);
-            String input = scanner.nextLine().trim();
+            String input = ConsoleUtils.getInput(prompt).trim();
             try {
                 int value = Integer.parseInt(input);
                 if (value >= min && value <= max) {
@@ -197,8 +184,7 @@ public class TeacherView {
 
     private double readDouble(String prompt, double min, double max) {
         while (true) {
-            System.out.print(prompt);
-            String input = scanner.nextLine().trim();
+            String input = ConsoleUtils.getInput(prompt).trim();
             try {
                 double value = Double.parseDouble(input);
                 if (value >= min && value <= max) {

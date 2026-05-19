@@ -3,9 +3,11 @@ package universitysystem.models.news;
 import universitysystem.models.core.DateTime;
 import universitysystem.models.users.User;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Comment {
+public class Comment implements Serializable {
+    private static final long serialVersionUID = 1L;
     private User user;
     private String text;
     private DateTime sentAt;

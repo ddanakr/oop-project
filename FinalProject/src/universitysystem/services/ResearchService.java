@@ -56,6 +56,7 @@ public class ResearchService {
         author.publishPaper(paper);
         createResearchPaperAnnouncement(paper, author);
         publishPaperInJournal(paper);
+        database.save();
         return paper;
     }
 
@@ -71,6 +72,7 @@ public class ResearchService {
         project.addParticipant(creator);
 
         database.getResearchProjects().add(project);
+        database.save();
         return project;
     }
 
@@ -84,6 +86,7 @@ public class ResearchService {
 
         if (!project.getParticipants().contains(researcher)) {
             project.addParticipant(researcher);
+            database.save();
         }
         return true;
     }
@@ -98,6 +101,7 @@ public class ResearchService {
 
         if (!project.getPapers().contains(paper)) {
             project.addPaper(paper);
+            database.save();
         }
         return true;
     }

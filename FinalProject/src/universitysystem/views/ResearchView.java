@@ -60,16 +60,20 @@ public class ResearchView {
     }
 
     public CitationFormat readCitationFormat() {
+        ConsoleUtils.printHeader("Citation Format");
         System.out.println("1. Plain text");
         System.out.println("2. BibTeX");
+        System.out.println("0. Back");
         int choice = ConsoleUtils.readInt("Citation format: ");
         return choice == 2 ? CitationFormat.BIBTEX : CitationFormat.PLAINTEXT;
     }
 
     public ResearchPaperSortType readPaperSortType() {
+        ConsoleUtils.printHeader("Sort Papers");
         System.out.println("1. Date");
         System.out.println("2. Citations");
         System.out.println("3. Pages");
+        System.out.println("0. Back");
         int choice = ConsoleUtils.readInt("Sort by: ");
         if (choice == 2) {
             return ResearchPaperSortType.CITATIONS;

@@ -1,5 +1,7 @@
 package universitysystem.models.news;
 
-public interface Subscriber {
+import java.io.Serializable;
+
+public interface Subscriber extends Serializable {
     void update(String notification);
 }
